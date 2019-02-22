@@ -49,8 +49,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :sires_task_api, SiresTaskApi.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "pavelrusakov",
+  password: "",
   database: "sires_task_api_dev",
   hostname: "localhost",
   pool_size: 10
