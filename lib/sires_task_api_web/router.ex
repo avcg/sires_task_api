@@ -5,10 +5,10 @@ defmodule SiresTaskApiWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api/v1", MyApiWeb do
+  # Public endpoints
+  scope "/api/v1", SiresTaskApiWeb do
     pipe_through :api
 
-    resources "/users", UserController, only: [:create, :show]
+    resources "/users", UserController, only: [:create]
   end
-
 end

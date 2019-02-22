@@ -24,6 +24,13 @@ defmodule SiresTaskApiWeb do
       import Plug.Conn
       import SiresTaskApiWeb.Gettext
       alias SiresTaskApiWeb.Router.Helpers, as: Routes
+
+      action_fallback SiresTaskApiWeb.FallbackController
+
+      def run(operation, conn, params) do
+        context = %{user: conn.assigns[:current_user]}
+        operation |> ExOperation.run(context, params)
+      end
     end
   end
 
