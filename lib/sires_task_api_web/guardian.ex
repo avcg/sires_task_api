@@ -6,7 +6,8 @@ defmodule SiresTaskApiWeb.Guardian do
 
   def resource_from_claims(%{"sub" => id}) do
     case User |> Repo.get(id) do
-      %User{} = user -> {:ok, user}
+      %User{active: true} = user -> {:ok, user}
+      %User{active: false} -> {:error, :user_deactivated}
       nil -> {:error, :user_not_found}
     end
   end

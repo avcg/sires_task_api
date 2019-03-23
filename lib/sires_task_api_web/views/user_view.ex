@@ -13,6 +13,6 @@ defmodule SiresTaskApiWeb.UserView do
 
   def user(user) do
     user
-    |> Map.take([:id, :email, :inserted_at, :updated_at])
+    |> Map.take([:id, :email, :active, :role, :inserted_at, :updated_at])
   end
 end

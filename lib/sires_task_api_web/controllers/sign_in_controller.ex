@@ -23,7 +23,7 @@ defmodule SiresTaskApiWeb.SignInController do
     downcase_email = String.downcase(email)
 
     User
-    |> where([u], fragment("LOWER(?) = ?", u.email, ^downcase_email))
+    |> where([u], u.active and fragment("LOWER(?) = ?", u.email, ^downcase_email))
     |> Repo.one()
   end
 end

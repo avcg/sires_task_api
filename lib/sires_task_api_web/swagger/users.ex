@@ -36,4 +36,26 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     response(201, "Created")
     response(401, "Unauthorized")
   end
+
+  swagger_path :deactivate do
+    post("/users/{id}/deactivate")
+    tag("Users")
+    summary("Deactivate a user")
+    description("Only available for admins. Deactivated user can't sign in or use existing JWT.")
+
+    parameters do
+      id(:path, :integer, "User id", required: true)
+    end
+  end
+
+  swagger_path :activate do
+    post("/users/{id}/activate")
+    tag("Users")
+    summary("Activate a user")
+    description("Put back previously deactivated user.")
+
+    parameters do
+      id(:path, :integer, "User id", required: true)
+    end
+  end
 end

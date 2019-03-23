@@ -23,6 +23,11 @@ defmodule SiresTaskApiWeb.Router do
   scope "/api/v1", SiresTaskApiWeb do
     pipe_through [:api, :protected]
 
+    resources "/users", UserController, only: [] do
+      post "/deactivate", UserController, :deactivate, as: :deactivate
+      post "/activate", UserController, :activate, as: :activate
+    end
+
     get "/current_user", CurrentUserController, :show
   end
 

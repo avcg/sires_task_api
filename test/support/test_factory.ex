@@ -8,6 +8,10 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:admin) do
+    build(:user, role: "admin")
+  end
+
   def build(factory_name, attrs) do
     factory_name |> build() |> struct(attrs)
   end
