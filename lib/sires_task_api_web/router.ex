@@ -25,4 +25,12 @@ defmodule SiresTaskApiWeb.Router do
 
     get "/current_user", CurrentUserController, :show
   end
+
+  # Swagger (API live documentation)
+  scope "/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI,
+      otp_app: :sires_task_api,
+      swagger_file: "swagger.json",
+      disable_validator: true
+  end
 end

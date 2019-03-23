@@ -45,7 +45,8 @@ defmodule SiresTaskApi.MixProject do
       {:bcrypt_elixir, "~> 1.0"},
       {:guardian, "~> 1.0"},
       {:ex_operation, "~> 0.5"},
-      {:bodyguard, "~> 2.2"}
+      {:bodyguard, "~> 2.2"},
+      {:phoenix_swagger, "~> 0.8"}
     ]
   end
 
