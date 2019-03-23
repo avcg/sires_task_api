@@ -6,7 +6,7 @@ defmodule SiresTaskApi.User do
     field :password_hash, :string
     field :password, :string, virtual: true
     field :active, :boolean, default: true
-
+    field :role, :string, default: "regular"
     timestamps()
   end
 end

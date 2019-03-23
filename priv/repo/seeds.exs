@@ -9,3 +9,9 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+SiresTaskApi.Repo.insert!(%SiresTaskApi.User{
+  email: "admin@example.com",
+  password_hash: Comeonin.Bcrypt.hashpwsalt("12345"),
+  role: "admin"
+})
