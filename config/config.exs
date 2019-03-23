@@ -27,6 +27,10 @@ config :phoenix, :json_library, Jason
 
 config :ex_operation, repo: SiresTaskApi.Repo
 
+config :sires_task_api, SiresTaskApiWeb.Guardian,
+  issuer: "sires_task_api",
+  secret_key: "lGJvqIfuWT8bLPU9PFJqzPXjkdoA4JJB+pT1YOmr7i+AH8YBWs5AduMuUfTv2pR2"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

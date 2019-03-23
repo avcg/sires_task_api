@@ -1,6 +1,12 @@
 defmodule SiresTaskApiWeb.UserView do
   use SiresTaskApiWeb, :view
 
+  def render("create.json", %{user: user, jwt: jwt}) do
+    "show.json"
+    |> render(%{user: user})
+    |> Map.put(:jwt, jwt)
+  end
+
   def render("show.json", %{user: user}) do
     %{user: user(user)}
   end

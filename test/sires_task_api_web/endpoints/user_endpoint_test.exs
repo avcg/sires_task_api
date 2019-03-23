@@ -1,27 +1,25 @@
 defmodule SiresTaskApiWeb.UserEndpointTest do
-  use SiresTaskApiWeb.ConnCase
+  use SiresTaskApiWeb.ConnCase, async: true
 
-  @create_attrs %{
-    email: "some@email.com",
-    password: "some password"
-  }
+  describe "POST /api/v1/users" do
+    test "renders user when data is valid", ctx do
+      params = %{email: "some@email.com", password: "some password"}
 
-  @invalid_attrs %{email: nil, password: nil}
+      response =
+        ctx.conn
+        |> post("/api/v1/users", user: params)
+        |> json_response(201)
 
-  setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
-  end
-
-  describe "create user" do
-    test "renders user when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
-      response = json_response(conn, 201)["user"]
-      assert %{"id" => _, "email" => "some@email.com"} = response
+      assert %{"user" => %{"id" => _, "email" => "some@email.com"}, "jwt" => _} = response
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+    test "renders errors when data is invalid", ctx do
+      response =
+        ctx.conn
+        |> post("/api/v1/users", user: %{email: nil, password: nil})
+        |> json_response(422)
+
+      assert response["errors"] != %{}
     end
   end
 end
