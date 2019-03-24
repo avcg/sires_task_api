@@ -10,7 +10,10 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
         |> post("/api/v1/users", user: params)
         |> json_response(201)
 
-      assert %{"user" => %{"id" => _, "email" => "some@email.com"}, "jwt" => _} = response
+      assert %{
+               "user" => %{"id" => _, "email" => "some@email.com", "inbox_project_id" => _},
+               "jwt" => _
+             } = response
     end
 
     test "renders errors when data is invalid", ctx do

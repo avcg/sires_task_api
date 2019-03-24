@@ -8,5 +8,7 @@ defmodule SiresTaskApi.User do
     field :active, :boolean, default: true
     field :role, :string, default: "regular"
     timestamps()
+
+    belongs_to :inbox_project, SiresTaskApi.Project
   end
 end

@@ -13,5 +13,6 @@
 SiresTaskApi.Repo.insert!(%SiresTaskApi.User{
   email: "admin@example.com",
   password_hash: Comeonin.Bcrypt.hashpwsalt("12345"),
-  role: "admin"
+  role: "admin",
+  inbox_project: %SiresTaskApi.Project{name: "Входящие"}
 })
