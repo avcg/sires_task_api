@@ -23,6 +23,20 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     response(200, "OK")
   end
 
+  swagger_path :show do
+    get("/projects/{id}")
+    tag("Projects")
+    summary("Show project")
+
+    parameters do
+      id(:path, :string, "Project id", required: true)
+    end
+
+    response(200, "OK")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
+
   swagger_path :create do
     post("/projects")
     tag("Projects")

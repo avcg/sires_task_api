@@ -4,6 +4,7 @@ defmodule SiresTaskApi.ProjectPolicy do
   alias SiresTaskApi.{Repo, User, Project}
 
   def authorize(_, %User{role: "admin"}, _), do: true
+  def authorize(:show, user, project), do: member?(user, project, ~w(admin regular guest))
   def authorize(:update, user, project), do: member?(user, project, ~w(admin))
   def authorize(:create_task, user, project), do: member?(user, project, ~w(admin regular))
   def authorize(_, _, _), do: false

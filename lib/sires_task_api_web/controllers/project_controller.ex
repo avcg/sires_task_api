@@ -1,6 +1,6 @@
 defmodule SiresTaskApiWeb.ProjectController do
   use SiresTaskApiWeb, :controller
-  alias SiresTaskApi.{Repo, Project}
+  alias SiresTaskApi.{Repo, Project, ProjectPolicy}
 
   @preloads [:creator, :editor, members: :user]
 
@@ -9,6 +9,14 @@ defmodule SiresTaskApiWeb.ProjectController do
       {projects, pagination} = Pagination.paginate(query, params)
       conn |> render(projects: projects, pagination: pagination)
     end
+  end
+
+  plug SiresTaskApiWeb.Find,
+       [schema: Project, assign: :project, preload: @preloads, policy: ProjectPolicy]
+       when action == :show
+
+  def show(conn, _params) do
+    conn |> render(project: conn.assigns.project)
   end
 
   def create(conn, params) do

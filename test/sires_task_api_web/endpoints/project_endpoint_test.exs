@@ -40,6 +40,24 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
     end
   end
 
+  describe "GET /api/v1/projects/:id" do
+    test "show project", ctx do
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: ctx.user)
+      response = ctx.conn |> get("/api/v1/projects/#{project.id}") |> json_response(200)
+      assert response["project"]["id"] == project.id
+    end
+
+    test "fail to show project for non-member", ctx do
+      project = insert!(:project)
+      ctx.conn |> get("/api/v1/projects/#{project.id}") |> json_response(403)
+    end
+
+    test "fail to show missing project", ctx do
+      ctx.conn |> get("/api/v1/projects/9999999999") |> json_response(404)
+    end
+  end
+
   describe "POST /api/v1/projects" do
     test "create project", ctx do
       response =
