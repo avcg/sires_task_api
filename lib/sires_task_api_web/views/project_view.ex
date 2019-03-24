@@ -1,6 +1,6 @@
 defmodule SiresTaskApiWeb.ProjectView do
   use SiresTaskApiWeb, :view
-  alias SiresTaskApiWeb.UserView
+  alias SiresTaskApiWeb.{UserView, Project.MemberView}
 
   def render("index.json", %{projects: projects, pagination: pagination}) do
     %{projects: Enum.map(projects, &project/1), total_count: pagination.total_count}
@@ -22,12 +22,6 @@ defmodule SiresTaskApiWeb.ProjectView do
     |> project(:short)
     |> Map.put(:creator, project.creator && UserView.user(project.creator))
     |> Map.put(:editor, project.editor && UserView.user(project.editor))
-    |> Map.put(:members, Enum.map(project.members, &member/1))
-  end
-
-  def member(member) do
-    member
-    |> Map.take([:role, :inserted_at])
-    |> Map.put(:user, UserView.user(member.user))
+    |> Map.put(:members, Enum.map(project.members, &MemberView.member/1))
   end
 end
