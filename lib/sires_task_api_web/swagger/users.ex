@@ -44,6 +44,7 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     put("/users/{id}")
     tag("Users")
     summary("Update a user")
+    description("Available only for the user himself and admins.")
 
     parameters do
       id(:path, :integer, "User id", required: true)

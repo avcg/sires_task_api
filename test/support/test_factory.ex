@@ -19,6 +19,14 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:project_member) do
+    %SiresTaskApi.Project.Member{
+      project: build(:project),
+      user: build(:user),
+      role: "regular"
+    }
+  end
+
   def build(factory_name, attrs) do
     factory_name |> build() |> struct(attrs)
   end

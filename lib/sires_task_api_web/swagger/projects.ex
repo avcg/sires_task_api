@@ -37,4 +37,32 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     response(401, "Unauthorized")
     response(422, "Unprocessable Entity")
   end
+
+  swagger_path :update do
+    put("/projects/{id}")
+    tag("Project")
+    summary("Update a project")
+    description("Available only for project admins and global admins.")
+
+    parameters do
+      id(:path, :integer, "Project id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            project(Schema.ref(:Project), "Project properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
 end

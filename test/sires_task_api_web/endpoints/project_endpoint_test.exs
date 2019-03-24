@@ -27,4 +27,43 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
       |> json_response(422)
     end
   end
+
+  describe "PUT /api/v1/projects/:id" do
+    test "update project", ctx do
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: ctx.user, role: "admin")
+
+      response =
+        ctx.conn
+        |> put("/api/v1/projects/#{project.id}", project: %{name: "New name"})
+        |> json_response(200)
+
+      assert response["project"]["name"] == "New name"
+      assert response["project"]["editor"]["id"] == ctx.user.id
+    end
+
+    test "fail to update project with wrong params", ctx do
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: ctx.user, role: "admin")
+
+      ctx.conn
+      |> put("/api/v1/projects/#{project.id}", project: %{})
+      |> json_response(422)
+    end
+
+    test "fail to update project without admin access", ctx do
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: ctx.user, role: "regular")
+
+      ctx.conn
+      |> put("/api/v1/projects/#{project.id}", project: %{name: "New name"})
+      |> json_response(403)
+    end
+
+    test "fail to update missing project", ctx do
+      ctx.conn
+      |> put("/api/v1/projects/9999999999", project: %{name: "New name"})
+      |> json_response(404)
+    end
+  end
 end

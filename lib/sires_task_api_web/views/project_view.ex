@@ -9,8 +9,8 @@ defmodule SiresTaskApiWeb.ProjectView do
   def project(project) do
     project
     |> Map.take([:name, :inserted_at, :updated_at])
-    |> Map.put(:creator, UserView.user(project.creator))
-    |> Map.put(:editor, UserView.user(project.editor))
+    |> Map.put(:creator, project.creator && UserView.user(project.creator))
+    |> Map.put(:editor, project.editor && UserView.user(project.editor))
     |> Map.put(:members, Enum.map(project.members, &member/1))
   end
 
