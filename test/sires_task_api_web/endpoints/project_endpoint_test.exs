@@ -6,6 +6,40 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
     {:ok, conn: conn |> sign_as(user), user: user}
   end
 
+  describe "GET /api/v1/projects" do
+    test "list available projects", ctx do
+      [project1, project2, project3, project4] = for _ <- 1..4, do: insert!(:project)
+      insert!(:project_member, project: project1, user: ctx.user, role: "guest")
+      insert!(:project_member, project: project2, user: ctx.user, role: "regular")
+      insert!(:project_member, project: project3, user: ctx.user, role: "admin")
+
+      response = ctx.conn |> get("/api/v1/projects") |> json_response(200)
+      ids = response["projects"] |> Enum.map(& &1["id"])
+
+      assert project1.id in ids
+      assert project2.id in ids
+      assert project3.id in ids
+      refute project4.id in ids
+
+      assert response["total_count"] == 3
+    end
+
+    test "pagination", ctx do
+      for _ <- 1..3 do
+        project = insert!(:project)
+        insert!(:project_member, project: project, user: ctx.user)
+      end
+
+      response = ctx.conn |> get("/api/v1/projects?limit=2") |> json_response(200)
+      assert response["total_count"] == 3
+      assert response["projects"] |> Enum.count() == 2
+
+      response = ctx.conn |> get("/api/v1/projects?limit=2&offset=2") |> json_response(200)
+      assert response["total_count"] == 3
+      assert response["projects"] |> Enum.count() == 1
+    end
+  end
+
   describe "POST /api/v1/projects" do
     test "create project", ctx do
       response =

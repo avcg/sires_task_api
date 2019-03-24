@@ -14,6 +14,15 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     }
   end
 
+  swagger_path :index do
+    get("/projects")
+    tag("Projects")
+    summary("List available projects")
+    paging(size: "limit", offset: "offset")
+
+    response(200, "OK")
+  end
+
   swagger_path :create do
     post("/projects")
     tag("Projects")

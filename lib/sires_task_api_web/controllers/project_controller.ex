@@ -4,6 +4,13 @@ defmodule SiresTaskApiWeb.ProjectController do
 
   @preloads [:creator, :editor, members: :user]
 
+  def index(conn, params) do
+    with {:ok, query} <- Project.IndexQuery.call(conn.assigns.current_user, params: params) do
+      {projects, pagination} = Pagination.paginate(query, params)
+      conn |> render(projects: projects, pagination: pagination)
+    end
+  end
+
   def create(conn, params) do
     with {:ok, %{create_project: project}} <- Project.Create |> run(conn, params) do
       conn |> put_status(:created) |> render(:show, project: Repo.preload(project, @preloads))
