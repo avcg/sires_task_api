@@ -24,6 +24,7 @@ defmodule SiresTaskApiWeb do
       import Plug.Conn
       import SiresTaskApiWeb.Gettext
       alias SiresTaskApiWeb.Router.Helpers, as: Routes
+      alias SiresTaskApiWeb.Controller.Helpers.Pagination
 
       action_fallback SiresTaskApiWeb.FallbackController
 

@@ -5,8 +5,10 @@ defmodule SiresTaskApi.User do
     field :email, :string
     field :password_hash, :string
     field :password, :string, virtual: true
-
+    field :active, :boolean, default: true
+    field :role, :string, default: "regular"
     timestamps()
-  end
 
+    belongs_to :inbox_project, SiresTaskApi.Project
+  end
 end

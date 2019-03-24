@@ -19,6 +19,7 @@ defmodule SiresTaskApiWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
+      import SiresTaskApi.TestFactory
 
       # The default endpoint for testing
       @endpoint SiresTaskApiWeb.Endpoint

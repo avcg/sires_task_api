@@ -12,7 +12,7 @@ defmodule SiresTaskApi.Operation do
     step(op, {:authorize, step_name}, fn txn ->
       case txn[step_name] do
         nil -> {:ok, :noop}
-        entity -> do_authorize(policy, action, op.context.current_user, entity)
+        entity -> do_authorize(policy, action, op.context.user, entity)
       end
     end)
   end

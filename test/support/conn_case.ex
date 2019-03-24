@@ -20,9 +20,15 @@ defmodule SiresTaskApiWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       alias SiresTaskApiWeb.Router.Helpers, as: Routes
+      import SiresTaskApi.TestFactory
 
       # The default endpoint for testing
       @endpoint SiresTaskApiWeb.Endpoint
+
+      def sign_as(conn, user) do
+        {:ok, token, _claims} = SiresTaskApiWeb.Guardian.encode_and_sign(user)
+        conn |> put_req_header("authorization", "Bearer " <> token)
+      end
     end
   end
 
@@ -33,6 +39,11 @@ defmodule SiresTaskApiWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(SiresTaskApi.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    conn =
+      Phoenix.ConnTest.build_conn()
+      |> Plug.Conn.put_req_header("accept", "application/json")
+      |> Plug.Conn.put_req_header("content-type", "application/json")
+
+    {:ok, conn: conn}
   end
 end

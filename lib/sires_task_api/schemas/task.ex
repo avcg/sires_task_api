@@ -6,6 +6,7 @@ defmodule SiresTaskApi.Task do
     field :description, :string
     field :start_time, :utc_datetime
     field :finish_time, :utc_datetime
+    field :done, :boolean, default: false
     timestamps()
 
     belongs_to :project, SiresTaskApi.Project

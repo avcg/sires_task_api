@@ -21,6 +21,7 @@ defmodule SiresTaskApi.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import SiresTaskApi.TestFactory
       import SiresTaskApi.DataCase
     end
   end
