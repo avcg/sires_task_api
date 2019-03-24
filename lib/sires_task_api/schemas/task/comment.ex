@@ -6,6 +6,6 @@ defmodule SiresTaskApi.Task.Comment do
     timestamps()
 
     belongs_to :task, SiresTaskApi.Task
-    belongs_to :author_id, SiresTaskApi.User
+    belongs_to :author, SiresTaskApi.User
   end
 end
