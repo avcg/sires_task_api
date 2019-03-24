@@ -186,4 +186,21 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     response(404, "Not Found")
     response(422, "Unprocessable Entity")
   end
+
+  swagger_path :remove_member do
+    delete("/projects/{project_id}/members/{id}")
+    tag("Projects")
+    summary("Remove member from project")
+    description("Available only for project admins and global admins.")
+
+    parameters do
+      project_id(:path, :integer, "Project id", required: true)
+      id(:path, :integer, "Member id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
 end

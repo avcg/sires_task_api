@@ -29,7 +29,7 @@ defmodule SiresTaskApiWeb.Router do
     end
 
     resources "/projects", ProjectController, only: [:index, :show, :create, :update, :delete] do
-      resources "/members", Project.MemberController, only: [:create, :update]
+      resources "/members", Project.MemberController, only: [:create, :update, :delete]
     end
 
     get "/current_user", CurrentUserController, :show

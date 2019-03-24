@@ -13,4 +13,10 @@ defmodule SiresTaskApiWeb.Project.MemberController do
       conn |> render(:show, member: Repo.preload(member, [:user]))
     end
   end
+
+  def delete(conn, params) do
+    with {:ok, _} <- Project.RemoveMember |> run(conn, params) do
+      conn |> json(%{result: "ok"})
+    end
+  end
 end

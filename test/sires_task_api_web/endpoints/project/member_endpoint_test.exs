@@ -128,6 +128,19 @@ defmodule SiresTaskApiWeb.Project.MemberEndpointTest do
       assert response["member"]["user"]["id"] == other_user.id
     end
 
+    test "fail to change member role without admin permissions", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user)
+      insert!(:project_member, project: project, user: other_user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> put("/api/v1/projects/#{project.id}/members/#{other_user.id}", member: %{role: "admin"})
+      |> json_response(403)
+    end
+
     test "fail to change member role with wrong params", ctx do
       user = insert!(:user)
       other_user = insert!(:user)
@@ -160,6 +173,78 @@ defmodule SiresTaskApiWeb.Project.MemberEndpointTest do
       ctx.conn
       |> sign_as(user)
       |> put("/api/v1/projects/9999999999/members/#{other_user.id}", member: %{role: "admin"})
+      |> json_response(404)
+    end
+  end
+
+  describe "DELETE /api/v1/projects/:project_id/members/:id" do
+    test "remove member role as project admin", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user, role: "admin")
+      insert!(:project_member, project: project, user: other_user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> delete("/api/v1/projects/#{project.id}/members/#{other_user.id}")
+      |> json_response(200)
+
+      ctx.conn
+      |> sign_as(other_user)
+      |> get("/api/v1/projects/#{project.id}")
+      |> json_response(403)
+    end
+
+    test "remove member role as global admin", ctx do
+      admin = insert!(:admin)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: other_user)
+
+      ctx.conn
+      |> sign_as(admin)
+      |> delete("/api/v1/projects/#{project.id}/members/#{other_user.id}")
+      |> json_response(200)
+
+      ctx.conn
+      |> sign_as(other_user)
+      |> get("/api/v1/projects/#{project.id}")
+      |> json_response(403)
+    end
+
+    test "fail to remove member without admin permissions", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user)
+      insert!(:project_member, project: project, user: other_user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> delete("/api/v1/projects/#{project.id}/members/#{other_user.id}")
+      |> json_response(403)
+    end
+
+    test "fail to remove user who is not a member", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user, role: "admin")
+
+      ctx.conn
+      |> sign_as(user)
+      |> delete("/api/v1/projects/#{project.id}/members/#{other_user.id}")
+      |> json_response(404)
+    end
+
+    test "fail to remove member from non-existing project", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> delete("/api/v1/projects/9999999999/members/#{other_user.id}")
       |> json_response(404)
     end
   end
