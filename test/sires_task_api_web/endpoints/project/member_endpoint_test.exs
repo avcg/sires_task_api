@@ -59,6 +59,19 @@ defmodule SiresTaskApiWeb.Project.MemberEndpointTest do
       |> json_response(422)
     end
 
+    test "fail to add member with wrong params", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user, role: "admin")
+      params = %{user_id: other_user.id, role: "wrong"}
+
+      ctx.conn
+      |> sign_as(user)
+      |> post("/api/v1/projects/#{project.id}/members", member: params)
+      |> json_response(422)
+    end
+
     test "fail to add non-existing user as member", ctx do
       user = insert!(:user)
       project = insert!(:project)
@@ -77,6 +90,76 @@ defmodule SiresTaskApiWeb.Project.MemberEndpointTest do
       ctx.conn
       |> sign_as(user)
       |> post("/api/v1/projects/9999999999/members", member: %{user_id: other_user.id})
+      |> json_response(404)
+    end
+  end
+
+  describe "PUT /api/v1/projects/:project_id/members/:id" do
+    test "change member role as project admin", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user, role: "admin")
+      insert!(:project_member, project: project, user: other_user)
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> put("/api/v1/projects/#{project.id}/members/#{other_user.id}", member: %{role: "admin"})
+        |> json_response(200)
+
+      assert response["member"]["role"] == "admin"
+      assert response["member"]["user"]["id"] == other_user.id
+    end
+
+    test "change member role as global admin", ctx do
+      admin = insert!(:admin)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: other_user)
+
+      response =
+        ctx.conn
+        |> sign_as(admin)
+        |> put("/api/v1/projects/#{project.id}/members/#{other_user.id}", member: %{role: "guest"})
+        |> json_response(200)
+
+      assert response["member"]["role"] == "guest"
+      assert response["member"]["user"]["id"] == other_user.id
+    end
+
+    test "fail to change member role with wrong params", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user, role: "admin")
+      insert!(:project_member, project: project, user: other_user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> put("/api/v1/projects/#{project.id}/members/#{other_user.id}", member: %{role: "wrong"})
+      |> json_response(422)
+    end
+
+    test "fail to change role of user who is not a member", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: user, role: "admin")
+
+      ctx.conn
+      |> sign_as(user)
+      |> put("/api/v1/projects/#{project.id}/members/#{other_user.id}", member: %{role: "admin"})
+      |> json_response(404)
+    end
+
+    test "fail to change role of member of non-existing project", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> put("/api/v1/projects/9999999999/members/#{other_user.id}", member: %{role: "admin"})
       |> json_response(404)
     end
   end

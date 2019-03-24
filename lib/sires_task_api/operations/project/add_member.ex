@@ -15,6 +15,7 @@ defmodule SiresTaskApi.Project.AddMember do
   defp add_member(project, user, role) do
     %Project.Member{project: project, user: user}
     |> Ecto.Changeset.change(%{role: role || "regular"})
+    |> Ecto.Changeset.validate_inclusion(:role, ~w(admin regular guest))
     |> Ecto.Changeset.unique_constraint(:user, name: :project_members_project_id_user_id_index)
     |> Repo.insert()
   end

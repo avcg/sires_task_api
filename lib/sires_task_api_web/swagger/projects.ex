@@ -146,5 +146,44 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     response(401, "Unauthorized")
     response(403, "Forbidden")
     response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :change_member_role do
+    put("/projects/{project_id}/members/{id}")
+    tag("Projects")
+    summary("Change member role")
+    description("Available only for project admins and global admins.")
+
+    parameters do
+      project_id(:path, :integer, "Project id", required: true)
+      id(:path, :integer, "Member id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            member(
+              Schema.new do
+                properties do
+                  role(:string, "Role", enum: ~w(admin regular guest), default: "regular")
+                end
+              end,
+              "Member properties",
+              required: true
+            )
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(200, "OK")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
   end
 end
