@@ -1,6 +1,14 @@
 defmodule SiresTaskApiWeb.UserController do
   use SiresTaskApiWeb, :controller
-  alias SiresTaskApi.User
+  alias SiresTaskApi.{User, UserPolicy}
+
+  plug SiresTaskApiWeb.Find,
+       [schema: User, assign: :user, policy: UserPolicy]
+       when action == :show
+
+  def show(conn, _params) do
+    conn |> render(user: conn.assigns.user)
+  end
 
   def create(conn, params) do
     with {:ok, %{create_user: user}} <- User.Create |> run(conn, params),

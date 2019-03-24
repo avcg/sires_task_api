@@ -16,6 +16,20 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     }
   end
 
+  swagger_path :show do
+    get("/users/{id}")
+    tag("Users")
+    summary("Show user")
+
+    parameters do
+      id(:path, :string, "User id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(404, "Not Found")
+  end
+
   swagger_path :create do
     post("/users")
     tag("Users")

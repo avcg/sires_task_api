@@ -1,6 +1,30 @@
 defmodule SiresTaskApiWeb.UserEndpointTest do
   use SiresTaskApiWeb.ConnCase, async: true
 
+  describe "GET /api/v1/users/:id" do
+    test "show user", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> get("/api/v1/users/#{other_user.id}")
+        |> json_response(200)
+
+      assert response["user"]["id"] == other_user.id
+    end
+
+    test "fail to show missing user", ctx do
+      user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> get("/api/v1/users/9999999999")
+      |> json_response(404)
+    end
+  end
+
   describe "POST /api/v1/users" do
     test "renders user when data is valid", ctx do
       params = %{email: "some@email.com", password: "some password"}
