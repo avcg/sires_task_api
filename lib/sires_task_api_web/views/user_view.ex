@@ -1,6 +1,7 @@
 defmodule SiresTaskApiWeb.UserView do
   use SiresTaskApiWeb, :view
 
+  # We also return JWT to allow to act as the newly registered user without forcing him to sign in.
   def render("create.json", %{user: user, jwt: jwt}) do
     "show.json"
     |> render(%{user: user})

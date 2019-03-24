@@ -23,6 +23,70 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
     end
   end
 
+  describe "PUT /api/v1/users/:id" do
+    test "update user profile", ctx do
+      user = insert!(:user)
+      params = %{email: "new@example.com", password: "9876543210"}
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> put("/api/v1/users/#{user.id}", user: params)
+        |> json_response(200)
+
+      assert response["user"]["email"] == params.email
+
+      # Try to sign in with the new password
+      ctx.conn
+      |> post("/api/v1/sign_in", params)
+      |> json_response(200)
+    end
+
+    test "change user role when triggered as admin", ctx do
+      user = insert!(:user)
+      admin = insert!(:admin)
+
+      response =
+        ctx.conn
+        |> sign_as(admin)
+        |> put("/api/v1/users/#{user.id}", user: %{role: "admin"})
+        |> json_response(200)
+
+      assert response["user"]["role"] == "admin"
+    end
+
+    test "fail to change the role when triggered as regular user", ctx do
+      user = insert!(:user)
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> put("/api/v1/users/#{user.id}", user: %{role: "admin"})
+        |> json_response(200)
+
+      assert response["user"]["role"] == "regular"
+    end
+
+    test "fail to update another user as regular user", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> put("/api/v1/users/#{other_user.id}", user: %{email: "nevermind@example.com"})
+      |> json_response(403)
+    end
+
+    test "fail to update missing user", ctx do
+      admin = insert!(:admin)
+
+      ctx.conn
+      |> sign_as(admin)
+      |> put("/api/v1/users/9999999999", user: %{email: "nevermind@example.com"})
+      |> json_response(404)
+    end
+  end
+
   describe "POST /api/v1/users/:id/(de)activate" do
     test "toggle user active off and on", ctx do
       user = insert!(:user)
@@ -68,7 +132,7 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
       ctx.conn
       |> sign_as(user)
       |> post("/api/v1/sign_in", email: user.email, password: "12345")
-      |> json_response(201)
+      |> json_response(200)
     end
 
     test "fail to deactivate someone as a regular user", ctx do

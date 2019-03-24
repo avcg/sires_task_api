@@ -10,6 +10,7 @@ defmodule SiresTaskApiWeb.Swagger.Users do
           properties do
             email(:string, "Email", required: true)
             password(:string, "Password", required: true)
+            role(:string, "Role (only admins can change it)", enum: ~w(regular admin))
           end
         end
     }
@@ -37,6 +38,32 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     response(401, "Unauthorized")
   end
 
+  swagger_path :update do
+    put("/users/{id}")
+    tag("Users")
+    summary("Update a user")
+
+    parameters do
+      id(:path, :integer, "User id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            user(Schema.ref(:User), "User properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
+
   swagger_path :deactivate do
     post("/users/{id}/deactivate")
     tag("Users")
@@ -46,6 +73,11 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     parameters do
       id(:path, :integer, "User id", required: true)
     end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
   end
 
   swagger_path :activate do
@@ -57,5 +89,10 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     parameters do
       id(:path, :integer, "User id", required: true)
     end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
   end
 end

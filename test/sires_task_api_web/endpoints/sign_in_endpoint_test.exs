@@ -12,7 +12,7 @@ defmodule SiresTaskApiWeb.SignInEndpointTest do
       response =
         ctx.conn
         |> post("/api/v1/sign_in", email: "Some@Email.com", password: "some password")
-        |> json_response(201)
+        |> json_response(200)
 
       assert %{"user" => %{"id" => _, "email" => "some@email.com"}, "jwt" => token} = response
 

@@ -9,7 +9,7 @@ defmodule SiresTaskApiWeb.SignInController do
          %User{} = user <- find_user(email),
          {:ok, _} <- Comeonin.Bcrypt.check_pass(user, password),
          {:ok, token, _claims} <- SiresTaskApiWeb.Guardian.encode_and_sign(user) do
-      conn |> put_status(:created) |> render(user: user, jwt: token)
+      conn |> render(user: user, jwt: token)
     else
       _ ->
         conn

@@ -9,6 +9,12 @@ defmodule SiresTaskApiWeb.UserController do
     end
   end
 
+  def update(conn, params) do
+    with {:ok, %{update_user: user}} <- User.Update |> run(conn, params) do
+      conn |> render(:show, user: user)
+    end
+  end
+
   def deactivate(conn, %{"user_id" => id}) do
     with {:ok, %{update_user: user}} <- User.ToggleActive |> run(conn, %{id: id, active: false}) do
       conn |> render(:show, user: user)
