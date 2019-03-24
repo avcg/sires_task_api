@@ -35,7 +35,9 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     end
 
     response(201, "Created")
+    response(400, "Bad Request")
     response(401, "Unauthorized")
+    response(422, "Unprocessable Entity")
   end
 
   swagger_path :update do
@@ -62,6 +64,7 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     response(401, "Unauthorized")
     response(403, "Forbidden")
     response(404, "Not Found")
+    response(422, "Unprocessable Entity")
   end
 
   swagger_path :deactivate do

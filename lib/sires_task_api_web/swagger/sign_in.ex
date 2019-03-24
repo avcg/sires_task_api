@@ -26,6 +26,7 @@ defmodule SiresTaskApiWeb.Swagger.SignIn do
     end
 
     response(200, "OK")
+    response(400, "Bad Request")
     response(401, "Unauthorized")
   end
 end

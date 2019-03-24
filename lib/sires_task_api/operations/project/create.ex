@@ -5,12 +5,15 @@ defmodule SiresTaskApi.Project.Create do
 
   def call(op) do
     op
-    |> step(:create_project, fn _ -> create_project(op.params.project) end)
+    |> step(:create_project, fn _ -> create_project(op.params.project, op.context.user) end)
   end
 
-  defp create_project(params) do
+  defp create_project(params, creator) do
     %Project{}
     |> changeset(params)
+    |> put_assoc(:creator, creator)
+    |> put_assoc(:editor, creator)
+    |> put_assoc(:members, [%Project.Member{user: creator, role: "admin"}])
     |> Repo.insert()
   end
 
