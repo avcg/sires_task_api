@@ -2,6 +2,13 @@ defmodule SiresTaskApiWeb.UserController do
   use SiresTaskApiWeb, :controller
   alias SiresTaskApi.{User, UserPolicy}
 
+  def index(conn, params) do
+    with {:ok, query} <- User.IndexQuery.call(conn.assigns.current_user, params: params) do
+      {users, pagination} = Pagination.paginate(query, params)
+      conn |> render(users: users, pagination: pagination)
+    end
+  end
+
   plug SiresTaskApiWeb.Find,
        [schema: User, assign: :user, policy: UserPolicy]
        when action == :show

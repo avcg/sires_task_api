@@ -16,6 +16,20 @@ defmodule SiresTaskApiWeb.Swagger.Users do
     }
   end
 
+  swagger_path :index do
+    get("/users")
+    tag("Users")
+    summary("List users")
+    paging(size: "limit", offset: "offset")
+
+    parameters do
+      search(:query, :string, "Search string for autosuggest")
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+  end
+
   swagger_path :show do
     get("/users/{id}")
     tag("Users")
