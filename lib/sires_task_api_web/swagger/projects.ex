@@ -21,6 +21,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     paging(size: "limit", offset: "offset")
 
     response(200, "OK")
+    response(401, "Unauthorized")
   end
 
   swagger_path :show do
@@ -33,6 +34,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     end
 
     response(200, "OK")
+    response(401, "Unauthorized")
     response(403, "Forbidden")
     response(404, "Not Found")
   end
@@ -87,5 +89,20 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     response(403, "Forbidden")
     response(404, "Not Found")
     response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :delete do
+    delete("/projects/{id}")
+    tag("Projects")
+    summary("Delete project")
+
+    parameters do
+      id(:path, :string, "Project id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
   end
 end

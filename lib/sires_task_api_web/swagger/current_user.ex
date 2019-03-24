@@ -7,5 +7,6 @@ defmodule SiresTaskApiWeb.Swagger.CurrentUser do
     summary("Show current user")
 
     response(200, "OK")
+    response(401, "Unauthorized")
   end
 end

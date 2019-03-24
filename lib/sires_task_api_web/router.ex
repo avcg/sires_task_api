@@ -28,7 +28,7 @@ defmodule SiresTaskApiWeb.Router do
       post "/activate", UserController, :activate, as: :activate
     end
 
-    resources "/projects", ProjectController, only: [:index, :show, :create, :update]
+    resources "/projects", ProjectController, only: [:index, :show, :create, :update, :delete]
 
     get "/current_user", CurrentUserController, :show
   end

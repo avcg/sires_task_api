@@ -30,4 +30,10 @@ defmodule SiresTaskApiWeb.ProjectController do
       conn |> render(:show, project: Repo.preload(project, @preloads))
     end
   end
+
+  def delete(conn, params) do
+    with {:ok, _} <- Project.Delete |> run(conn, params) do
+      conn |> json(%{result: "ok"})
+    end
+  end
 end

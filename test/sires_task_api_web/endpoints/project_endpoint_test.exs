@@ -118,4 +118,40 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
       |> json_response(404)
     end
   end
+
+  describe "DELETE /api/v1/projects/:id" do
+    test "delete project as project admin", ctx do
+      project = insert!(:project)
+      insert!(:project_member, project: project, user: ctx.user, role: "admin")
+      ctx.conn |> delete("/api/v1/projects/#{project.id}") |> json_response(200)
+      ctx.conn |> get("/api/v1/projects/#{project.id}") |> json_response(404)
+    end
+
+    test "delete project as global admin", ctx do
+      admin = insert!(:admin)
+      conn = ctx.conn |> sign_as(admin)
+
+      project = insert!(:project)
+      conn |> delete("/api/v1/projects/#{project.id}") |> json_response(200)
+      conn |> get("/api/v1/projects/#{project.id}") |> json_response(404)
+    end
+
+    test "fail to delete someone's inbox project even as global admin", ctx do
+      admin = insert!(:admin)
+      conn = ctx.conn |> sign_as(admin)
+
+      project = insert!(:project)
+      insert!(:user, inbox_project: project)
+      conn |> delete("/api/v1/projects/#{project.id}") |> json_response(403)
+    end
+
+    test "fail to delete project without admin access", ctx do
+      project = insert!(:project)
+      ctx.conn |> delete("/api/v1/projects/#{project.id}") |> json_response(403)
+    end
+
+    test "fail to delete missing project", ctx do
+      ctx.conn |> delete("/api/v1/projects/9999999999") |> json_response(404)
+    end
+  end
 end
