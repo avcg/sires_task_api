@@ -34,6 +34,18 @@ defmodule SiresTaskApiWeb.TaskController do
     end
   end
 
+  def mark_done(conn, %{"task_id" => id}) do
+    with {:ok, %{update_task: task}} <- Task.ToggleDone |> run(conn, %{id: id, done: true}) do
+      conn |> render(:show, task: Repo.preload(task, @preloads))
+    end
+  end
+
+  def mark_undone(conn, %{"task_id" => id}) do
+    with {:ok, %{update_task: task}} <- Task.ToggleDone |> run(conn, %{id: id, done: false}) do
+      conn |> render(:show, task: Repo.preload(task, @preloads))
+    end
+  end
+
   def delete(conn, params) do
     with {:ok, _} <- Task.Delete |> run(conn, params) do
       conn |> json(%{result: "ok"})

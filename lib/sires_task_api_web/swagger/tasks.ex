@@ -98,6 +98,44 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(422, "Unprocessable Entity")
   end
 
+  swagger_path :mark_done do
+    post("/tasks/{id}/mark_done")
+    tag("Tasks")
+    summary("Mark a task done")
+
+    description("""
+    Availabe only for task responsibles, co-responsibles, assignors, project admins and global admins.
+    """)
+
+    parameters do
+      id(:path, :integer, "Task id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
+
+  swagger_path :mark_undone do
+    post("/tasks/{id}/mark_undone")
+    tag("Tasks")
+    summary("Mark a task undone")
+
+    description("""
+    Availabe only for task responsibles, co-responsibles, assignors, project admins and global admins.
+    """)
+
+    parameters do
+      id(:path, :integer, "Task id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
+
   swagger_path :delete do
     delete("/tasks/{id}")
     tag("Tasks")

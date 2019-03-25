@@ -159,6 +159,78 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
     end
   end
 
+  describe "POST /api/v1/tasks/:id/mark_(un)done" do
+    defp toggle_done_on_and_off(conn, task) do
+      conn
+      |> post("/api/v1/tasks/#{task.id}/mark_done")
+      |> json_response(200)
+      |> get_in(~w(task done))
+      |> assert()
+
+      conn
+      |> post("/api/v1/tasks/#{task.id}/mark_undone")
+      |> json_response(200)
+      |> get_in(~w(task done))
+      |> refute()
+    end
+
+    test "toggle task done off and on as task responsible member", ctx do
+      task = insert!(:task)
+      user = insert!(:user)
+      insert!(:project_member, project: task.project, user: user)
+      insert!(:task_member, task: task, user: user, role: "responsible")
+      ctx.conn |> sign_as(user) |> toggle_done_on_and_off(task)
+    end
+
+    test "toggle task done off and on as task co-responsible member", ctx do
+      task = insert!(:task)
+      user = insert!(:user)
+      insert!(:project_member, project: task.project, user: user)
+      insert!(:task_member, task: task, user: user, role: "co-responsible")
+      ctx.conn |> sign_as(user) |> toggle_done_on_and_off(task)
+    end
+
+    test "toggle task done off and on as task assignor", ctx do
+      task = insert!(:task)
+      user = insert!(:user)
+      insert!(:project_member, project: task.project, user: user)
+      insert!(:task_member, task: task, user: user, role: "assignor")
+      ctx.conn |> sign_as(user) |> toggle_done_on_and_off(task)
+    end
+
+    test "toggle task done off and on as project admin", ctx do
+      task = insert!(:task)
+      user = insert!(:user)
+      insert!(:project_member, project: task.project, user: user, role: "admin")
+      ctx.conn |> sign_as(user) |> toggle_done_on_and_off(task)
+    end
+
+    test "toggle task done off and on as global admin", ctx do
+      task = insert!(:task)
+      admin = insert!(:admin)
+      ctx.conn |> sign_as(admin) |> toggle_done_on_and_off(task)
+    end
+
+    test "fail to mark task done without permission", ctx do
+      task = insert!(:task)
+      user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> post("/api/v1/tasks/#{task.id}/mark_done")
+      |> json_response(403)
+    end
+
+    test "fail to mark missing task done", ctx do
+      user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> post("/api/v1/tasks/9999999999/mark_done")
+      |> json_response(404)
+    end
+  end
+
   describe "DELETE /api/v1/tasks/:id" do
     setup %{conn: conn} do
       user = insert!(:user)
