@@ -1,6 +1,35 @@
 defmodule SiresTaskApiWeb.TaskEndpointTest do
   use SiresTaskApiWeb.ConnCase, async: true
 
+  describe "GET /api/v1/tasks" do
+    setup %{conn: conn} do
+      user = insert!(:user)
+      task = insert!(:task)
+      {:ok, user: user, conn: conn |> sign_as(user), task: task}
+    end
+
+    test "show task", ctx do
+      insert!(:project_member, user: ctx.user, project: ctx.task.project, role: "guest")
+      response = ctx.conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(200)
+      assert response["task"]["id"] == ctx.task.id
+    end
+
+    test "show task for global admin", ctx do
+      admin = insert!(:admin)
+      conn = ctx.conn |> sign_as(admin)
+      response = conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(200)
+      assert response["task"]["id"] == ctx.task.id
+    end
+
+    test "fail to show task without permissions", ctx do
+      ctx.conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(403)
+    end
+
+    test "fail to show missing task", ctx do
+      ctx.conn |> get("/api/v1/tasks/9999999999") |> json_response(404)
+    end
+  end
+
   describe "POST /api/v1/tasks" do
     test "create task", ctx do
       user = insert!(:user)
@@ -127,6 +156,45 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       |> sign_as(user)
       |> put("/api/v1/tasks/9999999999", task: %{description: "New description"})
       |> json_response(404)
+    end
+  end
+
+  describe "DELETE /api/v1/tasks/:id" do
+    setup %{conn: conn} do
+      user = insert!(:user)
+      {:ok, user: user, conn: conn |> sign_as(user), task: insert!(:task)}
+    end
+
+    test "delete task as task assignor", ctx do
+      insert!(:project_member, project: ctx.task.project, user: ctx.user)
+      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignor")
+
+      ctx.conn |> delete("/api/v1/tasks/#{ctx.task.id}") |> json_response(200)
+      ctx.conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(404)
+    end
+
+    test "delete task as project admin", ctx do
+      insert!(:project_member, project: ctx.task.project, user: ctx.user, role: "admin")
+
+      ctx.conn |> delete("/api/v1/tasks/#{ctx.task.id}") |> json_response(200)
+      ctx.conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(404)
+    end
+
+    test "delete task as global admin", ctx do
+      admin = insert!(:admin)
+      conn = ctx.conn |> sign_as(admin)
+
+      conn |> delete("/api/v1/tasks/#{ctx.task.id}") |> json_response(200)
+      conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(404)
+    end
+
+    test "fail to delete task without permissions", ctx do
+      insert!(:project_member, project: ctx.task.project, user: ctx.user)
+      ctx.conn |> delete("/api/v1/tasks/#{ctx.task.id}") |> json_response(403)
+    end
+
+    test "fail to delete missing task", ctx do
+      ctx.conn |> delete("/api/v1/tasks/9999999999") |> json_response(404)
     end
   end
 end

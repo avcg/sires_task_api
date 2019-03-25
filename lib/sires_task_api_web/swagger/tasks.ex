@@ -18,6 +18,21 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     }
   end
 
+  swagger_path :show do
+    get("/tasks/{id}")
+    tag("Tasks")
+    summary("Show task")
+
+    parameters do
+      id(:path, :string, "Task id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
+
   swagger_path :create do
     post("/tasks")
     tag("Tasks")
@@ -68,5 +83,21 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(403, "Forbidden")
     response(404, "Not Found")
     response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :delete do
+    delete("/tasks/{id}")
+    tag("Tasks")
+    summary("Delete task")
+    description("Available only for task assignors, project admins and global admins.")
+
+    parameters do
+      id(:path, :string, "Task id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
   end
 end
