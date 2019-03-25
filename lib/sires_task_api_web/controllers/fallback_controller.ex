@@ -30,4 +30,11 @@ defmodule SiresTaskApiWeb.FallbackController do
     |> put_view(SiresTaskApiWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, reason}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(SiresTaskApiWeb.ErrorView)
+    |> render(:"422", reason: reason)
+  end
 end

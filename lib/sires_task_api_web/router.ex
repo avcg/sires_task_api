@@ -34,7 +34,9 @@ defmodule SiresTaskApiWeb.Router do
       resources "/members", Project.MemberController, only: [:create, :update, :delete]
     end
 
-    resources "/tasks", TaskController, only: [:show, :create, :update, :delete]
+    resources "/tasks", TaskController, only: [:show, :create, :update, :delete] do
+      resources "/members", Task.MemberController, only: [:create, :delete]
+    end
   end
 
   # Swagger (API live documentation)
