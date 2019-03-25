@@ -49,6 +49,16 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:task_reference) do
+    project = build(:project)
+
+    %SiresTaskApi.Task.Reference{
+      parent_task: build(:task, project: project),
+      child_task: build(:task, project: project),
+      reference_type: "subtask"
+    }
+  end
+
   def build(factory_name, attrs) do
     factory_name |> build() |> struct(attrs)
   end

@@ -39,7 +39,7 @@ defmodule SiresTaskApiWeb.Task.MemberEndpointTest do
       assert response["member"]["user"]["id"] == other_user.id
     end
 
-    test "add member to project as global admin", ctx do
+    test "add member to task as global admin", ctx do
       admin = insert!(:admin)
       other_user = insert!(:user)
       task = insert!(:task)

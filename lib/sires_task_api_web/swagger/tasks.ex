@@ -27,6 +27,15 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
               required: true
             )
           end
+        end,
+      Reference:
+        swagger_schema do
+          title("Task reference")
+
+          properties do
+            task_id(:integer, "Child task id", required: true)
+            reference_type(:string, "Reference type", enum: ~w(subtask blocker), required: true)
+          end
         end
     }
   end
@@ -195,6 +204,53 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
         required: true,
         enum: ~w(assignor responsible co-responsible observer)
       )
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :add_reference do
+    post("/tasks/{task_id}/references")
+    tag("Tasks")
+    summary("Reference a task to another task")
+    description("Available only for task assignors, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Parent task id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            member(Schema.ref(:Referebce), "Reference properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(201, "Created")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :remove_reference do
+    delete("/tasks/{task_id}/references/{id}")
+    tag("Tasks")
+    summary("Remove references to a task from another task")
+    description("Available only for task assignors, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Parent task id", required: true)
+      id(:path, :integer, "Child task id", required: true)
     end
 
     response(200, "OK")
