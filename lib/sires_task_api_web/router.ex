@@ -23,7 +23,9 @@ defmodule SiresTaskApiWeb.Router do
   scope "/api/v1", SiresTaskApiWeb do
     pipe_through [:api, :protected]
 
-    resources "/users", UserController, only: [:update] do
+    get "/current_user", CurrentUserController, :show
+
+    resources "/users", UserController, only: [:index, :show, :update] do
       post "/deactivate", UserController, :deactivate, as: :deactivate
       post "/activate", UserController, :activate, as: :activate
     end
@@ -32,7 +34,7 @@ defmodule SiresTaskApiWeb.Router do
       resources "/members", Project.MemberController, only: [:create, :update, :delete]
     end
 
-    get "/current_user", CurrentUserController, :show
+    resources "/tasks", TaskController, only: [:create]
   end
 
   # Swagger (API live documentation)

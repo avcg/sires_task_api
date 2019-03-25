@@ -3,6 +3,7 @@ defmodule SiresTaskApi.UserPolicy do
   alias SiresTaskApi.User
 
   def authorize(_, %User{role: "admin"}, _), do: true
+  def authorize(:show, _, _), do: true
   def authorize(:update, %User{id: id}, %User{id: id}), do: true
   def authorize(_, _, _), do: false
 end

@@ -1,6 +1,64 @@
 defmodule SiresTaskApiWeb.UserEndpointTest do
   use SiresTaskApiWeb.ConnCase, async: true
 
+  describe "GET /api/v1/users" do
+    test "list users", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> get("/api/v1/users")
+        |> json_response(200)
+
+      ids = response["users"] |> Enum.map(& &1["id"])
+      assert user.id in ids
+      assert other_user.id in ids
+      assert response["total_count"] == 2
+    end
+
+    test "filter users by search string", ctx do
+      user = insert!(:user, email: "irrelevant@example.com")
+      other_user = insert!(:user, email: "findme@example.com")
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> get("/api/v1/users?search=findme")
+        |> json_response(200)
+
+      ids = response["users"] |> Enum.map(& &1["id"])
+      assert other_user.id in ids
+      refute user.id in ids
+      assert response["total_count"] == 1
+    end
+  end
+
+  describe "GET /api/v1/users/:id" do
+    test "show user", ctx do
+      user = insert!(:user)
+      other_user = insert!(:user)
+
+      response =
+        ctx.conn
+        |> sign_as(user)
+        |> get("/api/v1/users/#{other_user.id}")
+        |> json_response(200)
+
+      assert response["user"]["id"] == other_user.id
+    end
+
+    test "fail to show missing user", ctx do
+      user = insert!(:user)
+
+      ctx.conn
+      |> sign_as(user)
+      |> get("/api/v1/users/9999999999")
+      |> json_response(404)
+    end
+  end
+
   describe "POST /api/v1/users" do
     test "renders user when data is valid", ctx do
       params = %{email: "some@email.com", password: "some password"}
