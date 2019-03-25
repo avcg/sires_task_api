@@ -27,6 +27,28 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:task) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    %SiresTaskApi.Task{
+      project: build(:project),
+      name: "Task #{sequence()}",
+      description: "Do something",
+      start_time: now,
+      finish_time: now |> DateTime.add(24 * 60 * 60),
+      creator: build(:user),
+      editor: build(:user)
+    }
+  end
+
+  def build(:task_member) do
+    %SiresTaskApi.Task.Member{
+      task: build(:task),
+      user: build(:user),
+      role: "responsible"
+    }
+  end
+
   def build(factory_name, attrs) do
     factory_name |> build() |> struct(attrs)
   end

@@ -42,4 +42,31 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(403, "Forbidden")
     response(422, "Unprocessable Entity")
   end
+
+  swagger_path :update do
+    put("/tasks/{id}")
+    tag("Tasks")
+    summary("Update a task")
+    description("Available only for task assignors, project admins and global admins.")
+
+    parameters do
+      body(
+        :body,
+        Schema.new do
+          properties do
+            project(Schema.ref(:Task), "Task properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(200, "OK")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
 end

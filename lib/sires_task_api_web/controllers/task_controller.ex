@@ -19,4 +19,10 @@ defmodule SiresTaskApiWeb.TaskController do
       conn |> put_status(:created) |> render(:show, task: Repo.preload(task, @preloads))
     end
   end
+
+  def update(conn, params) do
+    with {:ok, %{update_task: task}} <- Task.Update |> run(conn, params) do
+      conn |> render(:show, task: Repo.preload(task, @preloads))
+    end
+  end
 end

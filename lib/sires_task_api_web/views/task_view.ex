@@ -30,7 +30,7 @@ defmodule SiresTaskApiWeb.TaskView do
   defp member(member) do
     member
     |> Map.take([:role, :inserted_at])
-    |> Map.put(:user, &UserView.user/1)
+    |> Map.put(:user, UserView.user(member.user))
   end
 
   defp child_reference(reference), do: reference(reference, :parent_task)
