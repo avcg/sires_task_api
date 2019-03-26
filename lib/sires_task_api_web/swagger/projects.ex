@@ -74,7 +74,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
 
   swagger_path :update do
     put("/projects/{id}")
-    tag("Project")
+    tag("Projects")
     summary("Update a project")
     description("Available only for project admins and global admins.")
 

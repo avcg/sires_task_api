@@ -59,6 +59,14 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:tag) do
+    %SiresTaskApi.Tag{
+      name: "Tag #{sequence()}",
+      creator: build(:user),
+      editor: build(:user)
+    }
+  end
+
   def build(factory_name, attrs) do
     factory_name |> build() |> struct(attrs)
   end
