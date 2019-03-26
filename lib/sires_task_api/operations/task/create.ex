@@ -6,42 +6,26 @@ defmodule SiresTaskApi.Task.Create do
         name!: :string,
         description: :string,
         start_time: :utc_datetime,
-        finish_time: :utc_datetime
+        finish_time: :utc_datetime,
+        tag_ids: {:array, :integer}
       }
     }
 
-  import Ecto.Changeset
-  alias SiresTaskApi.{Repo, Task, Project, ProjectPolicy}
+  alias SiresTaskApi.{Repo, Task, Project, TaskPolicy}
 
   def call(op) do
     op
     |> find(:project, schema: Project, id_path: [:task, :project_id])
-    |> authorize(:project, policy: ProjectPolicy, action: :create_task)
-    |> step(:create_task, fn _ -> create_task(op.params.task, op.context.user) end)
+    |> authorize(:project, policy: TaskPolicy, action: :create)
+    |> step(:tags, fn _ -> {:ok, Task.SharedHelpers.find_tags(op.params.task[:tag_ids])} end)
+    |> step(:create_task, &create_task(op.params.task, &1.tags, op.context.user))
   end
 
-  defp create_task(params, creator) do
+  defp create_task(params, tags, creator) do
     %Task{project_id: params.project_id, creator: creator, editor: creator}
-    |> changeset(params)
+    |> Task.SharedHelpers.changeset(params, tags)
+    |> Ecto.Changeset.validate_required([:name])
+    |> Ecto.Changeset.put_assoc(:members, [%Task.Member{user: creator, role: "assignor"}])
     |> Repo.insert()
-  end
-
-  defp changeset(struct, attrs) do
-    struct
-    |> cast(attrs, [:name, :description, :start_time, :finish_time])
-    |> validate_required([:name])
-    |> validate_length(:name, max: 255)
-    |> validate_start_and_finish_times()
-  end
-
-  defp validate_start_and_finish_times(changeset) do
-    start = changeset |> get_field(:start_time)
-    finish = changeset |> get_field(:finish_time)
-
-    if start && finish && DateTime.compare(start, finish) == :gt do
-      changeset |> add_error(:finish_time, "can't be earlier than start time")
-    else
-      changeset
-    end
   end
 end

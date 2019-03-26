@@ -74,7 +74,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
 
   swagger_path :update do
     put("/projects/{id}")
-    tag("Project")
+    tag("Projects")
     summary("Update a project")
     description("Available only for project admins and global admins.")
 
@@ -157,7 +157,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
 
     parameters do
       project_id(:path, :integer, "Project id", required: true)
-      id(:path, :integer, "Member id", required: true)
+      id(:path, :integer, "User id", required: true)
 
       body(
         :body,
@@ -195,7 +195,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
 
     parameters do
       project_id(:path, :integer, "Project id", required: true)
-      id(:path, :integer, "Member id", required: true)
+      id(:path, :integer, "User id", required: true)
     end
 
     response(200, "OK")

@@ -3,7 +3,7 @@ defmodule SiresTaskApi.Task.Member do
 
   @primary_key false
   schema "task_members" do
-    field :role, :string, default: "assignee"
+    field :role, :string, default: "assignee", primary_key: true
     timestamps(updated_at: false)
 
     belongs_to :task, SiresTaskApi.Task, primary_key: true
