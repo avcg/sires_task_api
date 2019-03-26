@@ -1,5 +1,8 @@
 defmodule SiresTaskApi.Task do
   use Ecto.Schema
+  import Ecto.Query
+  alias SiresTaskApi.{User, Project, Attachment, Tag}
+  alias __MODULE__.{Member, Reference, Comment}
 
   schema "tasks" do
     field :name, :string
@@ -9,17 +12,28 @@ defmodule SiresTaskApi.Task do
     field :done, :boolean, default: false
     timestamps()
 
-    belongs_to :project, SiresTaskApi.Project
-    belongs_to :creator, SiresTaskApi.User
-    belongs_to :editor, SiresTaskApi.User
+    belongs_to :project, Project
+    belongs_to :creator, User
+    belongs_to :editor, User
 
-    has_many :members, __MODULE__.Member
-    has_many :parent_references, __MODULE__.Reference, foreign_key: :parent_task_id
+    has_many :members, Member
+    has_many :parent_references, Reference, foreign_key: :parent_task_id
     has_many :children_tasks, through: [:parent_references, :children_task]
-    has_many :child_references, __MODULE__.Reference, foreign_key: :child_task_id
+    has_many :child_references, Reference, foreign_key: :child_task_id
     has_many :parent_tasks, through: [:child_references, :parent_task]
-    has_many :comments, __MODULE__.Comment
-    has_many :attachments, SiresTaskApi.Attachment
-    many_to_many :tags, SiresTaskApi.Tag, join_through: "task_tags", on_replace: :delete
+    has_many :comments, Comment
+    has_many :attachments, Attachment
+    many_to_many :tags, Tag, join_through: "task_tags", on_replace: :delete
+  end
+
+  @behaviour Bodyguard.Schema
+
+  def scope(query, %User{role: "admin"}, _), do: query
+
+  def scope(query, %User{id: user_id}, _) do
+    query
+    |> join(:inner, [t], p in assoc(t, :project))
+    |> join(:inner, [t, p], pm in assoc(p, :members))
+    |> where([t, p, pm], pm.user_id == ^user_id)
   end
 end

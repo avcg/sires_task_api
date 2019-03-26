@@ -3,6 +3,13 @@ defmodule SiresTaskApiWeb.TaskController do
   import Ecto.Query
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
 
+  def index(conn, params) do
+    with {:ok, query} <- Task.IndexQuery.call(conn.assigns.current_user, params: params) do
+      {tasks, pagination} = Pagination.paginate(query, params)
+      conn |> render(tasks: tasks, pagination: pagination)
+    end
+  end
+
   plug SiresTaskApiWeb.Find,
        [schema: Task, assign: :task, policy: TaskPolicy, preload: &__MODULE__.preloads/0]
        when action == :show
