@@ -72,7 +72,7 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
       |> json_response(422)
     end
 
-    test "fail to add refence to a task from another project", ctx do
+    test "fail to add reference to a task from another project", ctx do
       other_task = insert!(:task)
       insert!(:project_member, project: ctx.task.project, user: ctx.user, role: "admin")
       insert!(:project_member, project: other_task.project, user: ctx.user, role: "admin")
@@ -92,7 +92,7 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
       |> json_response(404)
     end
 
-    test "fail to add references to a non-existing task", ctx do
+    test "fail to add reference for a non-existing task", ctx do
       params = %{task_id: ctx.other_task.id, reference_type: "subtask"}
 
       ctx.conn
@@ -102,7 +102,7 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
   end
 
   describe "DELETE /api/v1/tasks/:task_id/references/:id" do
-    def ensure_not_a_reference(conn, reference) do
+    defp ensure_not_a_reference(conn, reference) do
       response =
         conn
         |> get("/api/v1/tasks/#{reference.parent_task_id}")
@@ -129,7 +129,7 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
       |> delete("/api/v1/tasks/#{parent_id}/references/#{child_id}")
       |> json_response(200)
 
-      ctx.conn |> sign_as(ctx.user) |> ensure_not_a_reference(ctx.reference)
+      ctx.conn |> ensure_not_a_reference(ctx.reference)
     end
 
     test "remove tak reference as project admin", ctx do
@@ -145,7 +145,7 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
       |> delete("/api/v1/tasks/#{parent_id}/references/#{child_id}")
       |> json_response(200)
 
-      ctx.conn |> sign_as(ctx.user) |> ensure_not_a_reference(ctx.reference)
+      ctx.conn |> ensure_not_a_reference(ctx.reference)
     end
 
     test "remove task reference as global admin", ctx do

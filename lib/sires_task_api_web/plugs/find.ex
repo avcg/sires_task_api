@@ -37,9 +37,11 @@ defmodule SiresTaskApiWeb.Find do
   defp find_struct(nil, _), do: {:ok, nil}
 
   defp find_struct(pk, opts) do
+    preloads = if is_function(opts[:preload], 0), do: opts[:preload].(), else: opts[:preload]
+
     opts[:schema]
     |> Repo.get_by([{opts[:field], pk}])
-    |> Repo.preload(opts[:preload])
+    |> Repo.preload(preloads)
     |> case do
       nil -> (opts[:skip_missing] && {:ok, nil}) || {:error, :not_found}
       struct -> {:ok, struct}

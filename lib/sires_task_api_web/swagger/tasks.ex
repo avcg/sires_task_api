@@ -42,6 +42,14 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
             task_id(:integer, "Child task id", required: true)
             reference_type(:string, "Reference type", enum: ~w(subtask blocker), required: true)
           end
+        end,
+      Comment:
+        swagger_schema do
+          title("Task comment")
+
+          properties do
+            text(:string, "Text", required: true)
+          end
         end
     }
   end
@@ -232,7 +240,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
         :body,
         Schema.new do
           properties do
-            member(Schema.ref(:Referebce), "Reference properties", required: true)
+            member(Schema.ref(:Reference), "Reference properties", required: true)
           end
         end,
         "Body",
@@ -264,5 +272,81 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(403, "Forbidden")
     response(404, "Not Found")
     response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :add_comment do
+    post("/tasks/{task_id}/comments")
+    tag("Tasks")
+    summary("Add comment to task")
+    description("Available only for project members and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            member(Schema.ref(:Comment), "Comment properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(201, "Created")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :change_comment do
+    put("/tasks/{task_id}/comments/{id}")
+    tag("Tasks")
+    summary("Change comment")
+    description("Available only for comment author, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+      id(:path, :integer, "Comment id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            member(Schema.ref(:Comment), "Comment properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(200, "OK")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :remove_comment do
+    delete("/tasks/{task_id}/commetns/{id}")
+    tag("Tasks")
+    summary("Remove comment from task")
+    description("Available only for comment author, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+      id(:path, :integer, "Comment id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
   end
 end

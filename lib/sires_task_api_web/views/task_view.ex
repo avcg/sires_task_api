@@ -1,7 +1,7 @@
 defmodule SiresTaskApiWeb.TaskView do
   use SiresTaskApiWeb, :view
   alias SiresTaskApiWeb.{ProjectView, UserView, AttachmentView, TagView}
-  alias SiresTaskApiWeb.Task.{MemberView, ReferenceView}
+  alias SiresTaskApiWeb.Task.{MemberView, ReferenceView, CommentView}
 
   @fields ~w(id name description start_time finish_time done inserted_at updated_at)a
 
@@ -26,6 +26,7 @@ defmodule SiresTaskApiWeb.TaskView do
     |> Map.put(:tags, Enum.map(task.tags, &TagView.tag/1))
     |> Map.put(:child_references, Enum.map(task.child_references, &child_reference/1))
     |> Map.put(:parent_references, Enum.map(task.parent_references, &parent_reference/1))
+    |> Map.put(:comments, Enum.map(task.comments, &CommentView.comment/1))
   end
 
   defp child_reference(reference), do: ReferenceView.reference(reference, :parent_task)

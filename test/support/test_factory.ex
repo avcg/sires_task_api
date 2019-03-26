@@ -59,6 +59,14 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:task_comment) do
+    %SiresTaskApi.Task.Comment{
+      task: build(:task),
+      author: build(:user),
+      text: "Comment #{sequence()}"
+    }
+  end
+
   def build(:tag) do
     %SiresTaskApi.Tag{
       name: "Tag #{sequence()}",
