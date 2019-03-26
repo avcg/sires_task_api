@@ -34,7 +34,7 @@ defmodule SiresTaskApiWeb.Router do
       resources "/members", Project.MemberController, only: [:create, :update, :delete]
     end
 
-    resources "/tasks", TaskController, only: [:show, :create, :update, :delete] do
+    resources "/tasks", TaskController, only: [:index, :show, :create, :update, :delete] do
       post "/mark_undone", TaskController, :mark_undone, as: :mark_undone
       post "/mark_done", TaskController, :mark_done, as: :mark_done
 

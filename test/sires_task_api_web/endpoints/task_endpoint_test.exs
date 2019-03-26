@@ -4,6 +4,79 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
   describe "GET /api/v1/tasks" do
     setup %{conn: conn} do
       user = insert!(:user)
+      {:ok, user: user, conn: conn |> sign_as(user)}
+    end
+
+    defp assert_index(conn, params, task_to_assert, task_to_refute) do
+      response = conn |> get("/api/v1/tasks?#{params}") |> json_response(200)
+      ids = response["tasks"] |> Enum.map(& &1["id"])
+      assert task_to_assert.id in ids
+      refute task_to_refute.id in ids
+      assert response["total_count"] == 1
+    end
+
+    test "list available tasks", ctx do
+      task = insert!(:task)
+      other_task = insert!(:task)
+      insert!(:project_member, project: task.project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("", task, other_task)
+    end
+
+    test "filter by search string", ctx do
+      project = insert!(:project)
+      task = insert!(:task, project: project, name: "Try to find me")
+      other_task = insert!(:task, project: project)
+      insert!(:project_member, project: project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("search=find", task, other_task)
+    end
+
+    test "filter by project", ctx do
+      task = insert!(:task)
+      other_task = insert!(:task)
+      insert!(:project_member, project: task.project, user: ctx.user, role: "guest")
+      insert!(:project_member, project: other_task.project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("project_id=#{task.project.id}", task, other_task)
+    end
+
+    test "filter by done flag", ctx do
+      project = insert!(:project)
+      task = insert!(:task, project: project, done: false)
+      other_task = insert!(:task, project: project, done: true)
+      insert!(:project_member, project: project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("done=false", task, other_task)
+    end
+
+    test "filter hot tasks", ctx do
+      project = insert!(:project)
+      now = DateTime.utc_now() |> DateTime.truncate(:second)
+      task = insert!(:task, project: project, finish_time: now |> DateTime.add(6 * 86400))
+      other_task = insert!(:task, project: project, finish_time: now |> DateTime.add(8 * 86400))
+      insert!(:project_member, project: project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("hot=true", task, other_task)
+    end
+
+    test "filter by member role", ctx do
+      project = insert!(:project)
+      task = insert!(:task, project: project)
+      other_task = insert!(:task, project: project)
+      insert!(:project_member, project: project, user: ctx.user, role: "guest")
+      insert!(:task_member, task: task, user: ctx.user, role: "co-responsible")
+      ctx.conn |> assert_index("role=co-responsible", task, other_task)
+    end
+
+    test "filter by tags", ctx do
+      project = insert!(:project)
+      tag = build(:tag)
+      task = insert!(:task, project: project, tags: [tag])
+      other_task = insert!(:task, project: project)
+      insert!(:project_member, project: project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("tags[]=#{tag.name}", task, other_task)
+    end
+  end
+
+  describe "GET /api/v1/tasks/:id" do
+    setup %{conn: conn} do
+      user = insert!(:user)
       task = insert!(:task)
       {:ok, user: user, conn: conn |> sign_as(user), task: task}
     end

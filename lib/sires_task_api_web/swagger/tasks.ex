@@ -1,6 +1,9 @@
 defmodule SiresTaskApiWeb.Swagger.Tasks do
   use PhoenixSwagger
 
+  @task_member_roles ~w(assignor responsible co-responsible observer)
+  @reference_types ~w(subtask blocker)
+
   def swagger_definitions do
     %{
       Task:
@@ -27,11 +30,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
 
           properties do
             user_id(:integer, "User id", required: true)
-
-            role(:string, "Role",
-              enum: ~w(assignor responsible co-responsible observer),
-              required: true
-            )
+            role(:string, "Role", enum: @task_member_roles, required: true)
           end
         end,
       Reference:
@@ -40,7 +39,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
 
           properties do
             task_id(:integer, "Child task id", required: true)
-            reference_type(:string, "Reference type", enum: ~w(subtask blocker), required: true)
+            reference_type(:string, "Reference type", enum: @reference_types, required: true)
           end
         end,
       Comment:
@@ -52,6 +51,24 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
           end
         end
     }
+  end
+
+  swagger_path :index do
+    get("/tasks")
+    tag("Tasks")
+    summary("List tasks")
+    paging(size: "limit", offset: "offset")
+
+    parameters do
+      search(:query, :string, "Search string")
+      project_id(:query, :integer, "Filter by project id")
+      done(:query, :boolean, "Filter by done flag")
+      hot(:query, :boolean, "Filter tasks with finish time in the last 7 days")
+      role(:query, :string, "Filter by current user's role in the task", enum: @task_member_roles)
+      tags(:query, :array, "Filter by tags", items: :string)
+    end
+
+    response(200, "OK")
   end
 
   swagger_path :show do
@@ -213,11 +230,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     parameters do
       task_id(:path, :integer, "Task id", required: true)
       id(:path, :integer, "User id", required: true)
-
-      role(:query, :string, "Role",
-        required: true,
-        enum: ~w(assignor responsible co-responsible observer)
-      )
+      role(:query, :string, "Role", required: true, enum: @task_member_roles)
     end
 
     response(200, "OK")
