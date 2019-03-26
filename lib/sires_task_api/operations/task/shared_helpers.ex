@@ -1,11 +1,14 @@
 defmodule SiresTaskApi.Task.SharedHelpers do
   import Ecto.Changeset
+  import Ecto.Query
+  alias SiresTaskApi.{Repo, Tag}
 
-  def changeset(struct, attrs) do
+  def changeset(struct, attrs, tags) do
     struct
     |> cast(attrs, [:name, :description, :start_time, :finish_time])
     |> validate_length(:name, max: 255)
     |> validate_start_and_finish_times()
+    |> put_tags(tags)
   end
 
   defp validate_start_and_finish_times(changeset) do
@@ -18,4 +21,10 @@ defmodule SiresTaskApi.Task.SharedHelpers do
       changeset
     end
   end
+
+  defp put_tags(changeset, nil), do: changeset
+  defp put_tags(changeset, tags), do: changeset |> put_assoc(:tags, tags)
+
+  def find_tags(nil), do: nil
+  def find_tags(ids), do: Tag |> where([t], t.id in ^ids) |> Repo.all()
 end

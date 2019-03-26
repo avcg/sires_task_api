@@ -35,6 +35,7 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       user = insert!(:user)
       project = insert!(:project)
       insert!(:project_member, user: user, project: project)
+      tag = insert!(:tag)
       now = DateTime.utc_now() |> DateTime.truncate(:second)
 
       params = %{
@@ -42,7 +43,8 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
         name: "Some task",
         description: "Do something",
         start_time: now |> DateTime.to_iso8601(),
-        finish_time: now |> DateTime.add(1) |> DateTime.to_iso8601()
+        finish_time: now |> DateTime.add(1) |> DateTime.to_iso8601(),
+        tag_ids: [tag.id]
       }
 
       response =
@@ -56,6 +58,7 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       assert response["task"]["description"] == "Do something"
       assert response["task"]["start_time"] == params.start_time
       assert response["task"]["finish_time"] == params.finish_time
+      assert response["task"]["tags"] |> List.first() |> Map.fetch!("id") == tag.id
     end
 
     test "fail to create task as guest", ctx do
@@ -82,15 +85,17 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
   describe "PUT /api/v1/tasks" do
     test "update task", ctx do
       user = insert!(:user)
-      task = insert!(:task)
+      task = insert!(:task, tags: [build(:tag)])
       insert!(:project_member, user: user, project: task.project)
       insert!(:task_member, user: user, task: task, role: "assignor")
+      tag = insert!(:tag)
 
       params = %{
         name: "New name",
         description: "New description",
         start_time: task.start_time |> DateTime.add(3600) |> DateTime.to_iso8601(),
-        finish_time: task.finish_time |> DateTime.add(3600) |> DateTime.to_iso8601()
+        finish_time: task.finish_time |> DateTime.add(3600) |> DateTime.to_iso8601(),
+        tag_ids: [tag.id]
       }
 
       response =
@@ -103,6 +108,7 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       assert response["task"]["description"] == params.description
       assert response["task"]["start_time"] == params.start_time
       assert response["task"]["finish_time"] == params.finish_time
+      assert response["task"]["tags"] |> Enum.map(& &1["id"]) == [tag.id]
     end
 
     test "update task as project admin", ctx do

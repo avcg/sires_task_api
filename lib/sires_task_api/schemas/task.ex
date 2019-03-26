@@ -20,6 +20,6 @@ defmodule SiresTaskApi.Task do
     has_many :parent_tasks, through: [:child_references, :parent_task]
     has_many :comments, __MODULE__.Comment
     has_many :attachments, SiresTaskApi.Attachment
-    many_to_many :tags, SiresTaskApi.Tag, join_through: "task_tags"
+    many_to_many :tags, SiresTaskApi.Tag, join_through: "task_tags", on_replace: :delete
   end
 end

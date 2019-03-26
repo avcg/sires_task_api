@@ -13,6 +13,12 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
             description(:string, "Description")
             start_time(:string, "UTC start time")
             finish_time(:string, "UTC finish time")
+
+            tag_ids(
+              :array,
+              "Tag ids. Replaces the whole set when specified on update.",
+              items: :integer
+            )
           end
         end,
       Member:
