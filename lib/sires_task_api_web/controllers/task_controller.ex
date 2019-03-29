@@ -20,13 +20,15 @@ defmodule SiresTaskApiWeb.TaskController do
 
   def create(conn, params) do
     with {:ok, %{create_task: task}} <- Task.Create |> run(conn, params) do
-      conn |> put_status(:created) |> render(:show, task: Repo.preload(task, preloads()))
+      conn
+      |> put_status(:created)
+      |> render(:show, task: Repo.preload(task, preloads(), force: true))
     end
   end
 
   def update(conn, params) do
     with {:ok, %{update_task: task}} <- Task.Update |> run(conn, params) do
-      conn |> render(:show, task: Repo.preload(task, preloads()))
+      conn |> render(:show, task: Repo.preload(task, preloads(), force: true))
     end
   end
 
@@ -49,14 +51,23 @@ defmodule SiresTaskApiWeb.TaskController do
   end
 
   def preloads do
+    last_attachment_versions_query =
+      Task.Attachment.Version
+      |> order_by(desc: :inserted_at)
+      |> distinct(:attachment_id)
+
+    comments_query =
+      Task.Comment
+      |> order_by(desc: :inserted_at)
+
     [
       :project,
       :creator,
       :editor,
-      :attachments,
       :tags,
       members: :user,
-      comments: {Task.Comment |> order_by(desc: :inserted_at), [:author]},
+      attachments: [versions: {last_attachment_versions_query, [:attachment]}],
+      comments: {comments_query, [:author, :attachments]},
       child_references: :parent_task,
       parent_references: :child_task
     ]

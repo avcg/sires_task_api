@@ -10,13 +10,17 @@ defmodule SiresTaskApiWeb.Task.CommentEndpointTest do
 
     test "add comment to task as project guest", ctx do
       insert!(:project_member, project: ctx.task.project, user: ctx.user, role: "guest")
+      upload = build(:upload)
+      params = %{text: "Hello", attachments: [%{file: upload}]}
 
       response =
         ctx.conn
-        |> post("/api/v1/tasks/#{ctx.task.id}/comments", comment: %{text: "Hello"})
+        |> post("/api/v1/tasks/#{ctx.task.id}/comments", comment: params)
         |> json_response(201)
 
       assert response["comment"]["text"] == "Hello"
+      assert url = get_in(response, ["comment", "attachments", Access.at(0), "url"])
+      assert File.read!("." <> url) == File.read!(upload.path)
     end
 
     test "fail to comment a task while not being a project member", ctx do
@@ -51,11 +55,18 @@ defmodule SiresTaskApiWeb.Task.CommentEndpointTest do
 
     test "update task comment as its author", ctx do
       insert!(:project_member, project: ctx.comment.task.project, user: ctx.user)
+      upload = build(:upload)
+      params = %{text: "New text", attachments: [%{file: upload}]}
 
-      ctx.conn
-      |> sign_as(ctx.comment.author)
-      |> put("/api/v1/tasks/#{ctx.comment.task_id}/comments/#{ctx.comment.id}", comment: @params)
-      |> json_response(200)
+      response =
+        ctx.conn
+        |> sign_as(ctx.comment.author)
+        |> put("/api/v1/tasks/#{ctx.comment.task_id}/comments/#{ctx.comment.id}", comment: params)
+        |> json_response(200)
+
+      assert response["comment"]["text"] == params.text
+      assert url = get_in(response, ["comment", "attachments", Access.at(0), "url"])
+      assert File.read!("." <> url) == File.read!(upload.path)
     end
 
     test "update task comment as project admin", ctx do

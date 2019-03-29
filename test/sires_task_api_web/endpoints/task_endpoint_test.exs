@@ -104,12 +104,17 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
   end
 
   describe "POST /api/v1/tasks" do
-    test "create task", ctx do
+    setup %{conn: conn} do
       user = insert!(:user)
+      {:ok, user: user, conn: conn |> sign_as(user)}
+    end
+
+    test "create task", ctx do
       project = insert!(:project)
-      insert!(:project_member, user: user, project: project)
+      insert!(:project_member, user: ctx.user, project: project)
       tag = insert!(:tag)
       now = DateTime.utc_now() |> DateTime.truncate(:second)
+      upload = build(:upload)
 
       params = %{
         project_id: project.id,
@@ -117,12 +122,12 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
         description: "Do something",
         start_time: now |> DateTime.to_iso8601(),
         finish_time: now |> DateTime.add(1) |> DateTime.to_iso8601(),
-        tag_ids: [tag.id]
+        tag_ids: [tag.id],
+        attachments: [%{file: upload}]
       }
 
       response =
         ctx.conn
-        |> sign_as(user)
         |> post("/api/v1/tasks", task: params)
         |> json_response(201)
 
@@ -132,24 +137,21 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       assert response["task"]["start_time"] == params.start_time
       assert response["task"]["finish_time"] == params.finish_time
       assert response["task"]["tags"] |> List.first() |> Map.fetch!("id") == tag.id
+      assert url = get_in(response, ["task", "attachments", Access.at(0), "last_version", "url"])
+      assert File.read!("." <> url) == File.read!(upload.path)
     end
 
     test "fail to create task as guest", ctx do
-      user = insert!(:user)
       project = insert!(:project)
-      insert!(:project_member, user: user, project: project, role: "guest")
+      insert!(:project_member, user: ctx.user, project: project, role: "guest")
 
       ctx.conn
-      |> sign_as(user)
       |> post("/api/v1/tasks", task: %{project_id: project.id, name: "Some task"})
       |> json_response(403)
     end
 
     test "fail to create task in a missing project", ctx do
-      user = insert!(:user)
-
       ctx.conn
-      |> sign_as(user)
       |> post("/api/v1/tasks", task: %{project_id: 9_999_999_999, name: "Some task"})
       |> json_response(404)
     end
@@ -162,13 +164,15 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       insert!(:project_member, user: user, project: task.project)
       insert!(:task_member, user: user, task: task, role: "assignor")
       tag = insert!(:tag)
+      upload = build(:upload)
 
       params = %{
         name: "New name",
         description: "New description",
         start_time: task.start_time |> DateTime.add(3600) |> DateTime.to_iso8601(),
         finish_time: task.finish_time |> DateTime.add(3600) |> DateTime.to_iso8601(),
-        tag_ids: [tag.id]
+        tag_ids: [tag.id],
+        attachments: [%{file: upload}]
       }
 
       response =
@@ -182,6 +186,8 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       assert response["task"]["start_time"] == params.start_time
       assert response["task"]["finish_time"] == params.finish_time
       assert response["task"]["tags"] |> Enum.map(& &1["id"]) == [tag.id]
+      assert url = get_in(response, ["task", "attachments", Access.at(0), "last_version", "url"])
+      assert File.read!("." <> url) == File.read!(upload.path)
     end
 
     test "update task as project admin", ctx do

@@ -41,6 +41,10 @@ defmodule SiresTaskApiWeb.Router do
       resources "/members", Task.MemberController, only: [:create, :delete]
       resources "/references", Task.ReferenceController, only: [:create, :delete]
       resources "/comments", Task.CommentController, only: [:create, :update, :delete]
+
+      resources "/attachments", Task.AttachmentController, only: [] do
+        resources "/versions", Task.Attachment.VersionController, only: [:index, :create]
+      end
     end
 
     resources "/tags", TagController, only: [:index, :create, :update, :delete]
