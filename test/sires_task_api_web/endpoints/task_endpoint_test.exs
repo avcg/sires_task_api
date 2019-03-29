@@ -74,6 +74,50 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
     end
   end
 
+  describe "GET /api/v1/tasks/calendar" do
+    setup %{conn: conn} do
+      user = insert!(:user)
+      {:ok, conn: conn |> sign_as(user), user: user}
+    end
+
+    test "show calendar for specified month", ctx do
+      {:ok, dt1, _} = DateTime.from_iso8601("2019-03-15T17:40:21Z")
+      task1 = insert!(:task, finish_time: dt1)
+      insert!(:project_member, project: task1.project, user: ctx.user)
+
+      {:ok, dt2, _} = DateTime.from_iso8601("2019-03-29T14:30:00Z")
+      task2 = insert!(:task, finish_time: dt2)
+      insert!(:project_member, project: task2.project, user: ctx.user)
+
+      {:ok, dt3, _} = DateTime.from_iso8601("2019-03-29T20:25:00Z")
+      task3 = insert!(:task, finish_time: dt3)
+      insert!(:project_member, project: task3.project, user: ctx.user)
+
+      {:ok, dt4, _} = DateTime.from_iso8601("2019-04-01T00:00:00Z")
+      task4 = insert!(:task, finish_time: dt4)
+      insert!(:project_member, project: task4.project, user: ctx.user)
+
+      {:ok, dt5, _} = DateTime.from_iso8601("2019-02-28T23:59:59Z")
+      task5 = insert!(:task, finish_time: dt5)
+      insert!(:project_member, project: task5.project, user: ctx.user)
+
+      response = ctx.conn |> get("/api/v1/tasks/calendar?year=2019&month=3") |> json_response(200)
+      assert response |> get_in(["calendar", "15", Access.at(0), "id"]) == task1.id
+      assert response |> get_in(["calendar", "29", Access.at(0), "id"]) == task2.id
+      assert response |> get_in(["calendar", "29", Access.at(1), "id"]) == task3.id
+      refute response["calendar"]["1"]
+      refute response["calendar"]["28"]
+    end
+
+    test "fail to show calendar with wrong params", ctx do
+      ctx.conn |> get("/api/v1/tasks/calendar?year=2019") |> json_response(422)
+      ctx.conn |> get("/api/v1/tasks/calendar?month=1") |> json_response(422)
+      ctx.conn |> get("/api/v1/tasks/calendar?year=2019&month=13") |> json_response(422)
+      ctx.conn |> get("/api/v1/tasks/calendar?year=0&month=1") |> json_response(422)
+      ctx.conn |> get("/api/v1/tasks/calendar?year=wrong&month=wrong") |> json_response(422)
+    end
+  end
+
   describe "GET /api/v1/tasks/:id" do
     setup %{conn: conn} do
       user = insert!(:user)

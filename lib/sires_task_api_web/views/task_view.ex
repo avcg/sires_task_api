@@ -9,6 +9,10 @@ defmodule SiresTaskApiWeb.TaskView do
     %{tasks: Enum.map(tasks, &task/1), total_count: pagination.total_count}
   end
 
+  def render("calendar.json", %{tasks: tasks}) do
+    %{calendar: tasks |> Stream.map(&task(&1)) |> Enum.group_by(& &1.finish_time.day)}
+  end
+
   def render("show.json", %{task: task}) do
     %{task: task(task, :full)}
   end

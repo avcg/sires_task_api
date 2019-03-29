@@ -10,6 +10,21 @@ defmodule SiresTaskApiWeb.TaskController do
     end
   end
 
+  def calendar(conn, params) do
+    with {:ok, {year, month}} <- parse_month(params["year"], params["month"]),
+         user <- conn.assigns.current_user,
+         {:ok, query} <- Task.CalendarQuery.call(user, year: year, month: month) do
+      conn |> render(tasks: Repo.all(query))
+    end
+  end
+
+  defp parse_month(year, month) do
+    case [year, month] |> Enum.map(&(&1 |> to_string() |> Integer.parse())) do
+      [{year, ""}, {month, ""}] when year in 2000..9999 and month in 1..12 -> {:ok, {year, month}}
+      _ -> {:error, :bad_or_missing_year_or_month}
+    end
+  end
+
   plug SiresTaskApiWeb.Find,
        [schema: Task, assign: :task, policy: TaskPolicy, preload: &__MODULE__.preloads/0]
        when action == :show
