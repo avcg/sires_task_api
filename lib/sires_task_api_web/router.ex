@@ -24,6 +24,7 @@ defmodule SiresTaskApiWeb.Router do
     pipe_through [:api, :protected]
 
     get "/current_user", CurrentUserController, :show
+    get "/tasks/calendar", TaskController, :calendar, as: :calendar
 
     resources "/users", UserController, only: [:index, :show, :update] do
       post "/deactivate", UserController, :deactivate, as: :deactivate

@@ -99,6 +99,20 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(200, "OK")
   end
 
+  swagger_path :calendar do
+    get("/tasks/calendar")
+    tag("Tasks")
+    summary("Calendar for specified month")
+    paging(size: "limit", offset: "offset")
+
+    parameters do
+      year(:query, :integer, "Year", required: true, minimum: 2000, maximum: 9999)
+      month(:query, :integer, "Month", required: true, minimum: 1, maximum: 12)
+    end
+
+    response(200, "OK")
+  end
+
   swagger_path :show do
     get("/tasks/{id}")
     tag("Tasks")
