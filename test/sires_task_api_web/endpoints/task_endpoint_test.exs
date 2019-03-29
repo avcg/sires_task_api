@@ -46,6 +46,18 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       ctx.conn |> assert_index("done=false", task, other_task)
     end
 
+    test "filter by finish date", ctx do
+      project = insert!(:project)
+      now = DateTime.utc_now() |> DateTime.truncate(:second)
+      task = insert!(:task, project: project, finish_time: now)
+      other_task = insert!(:task, project: project, finish_time: now |> DateTime.add(86400))
+      insert!(:project_member, project: project, user: ctx.user, role: "guest")
+      date = now |> DateTime.to_date() |> Date.to_iso8601()
+      ctx.conn |> assert_index("finish_date=#{date}", task, other_task)
+
+      ctx.conn |> get("/api/v1/tasks?finish_date=12345") |> json_response(422)
+    end
+
     test "filter hot tasks", ctx do
       project = insert!(:project)
       now = DateTime.utc_now() |> DateTime.truncate(:second)

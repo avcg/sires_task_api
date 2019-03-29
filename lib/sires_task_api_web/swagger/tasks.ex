@@ -91,6 +91,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
       search(:query, :string, "Search string")
       project_id(:query, :integer, "Filter by project id")
       done(:query, :boolean, "Filter by done flag")
+      finish_date(:query, :string, "Filter by finish date. Format: yyyy-mm-dd.")
       hot(:query, :boolean, "Filter tasks with finish time in the last 7 days")
       role(:query, :string, "Filter by current user's role in the task", enum: @task_member_roles)
       tags(:query, :array, "Filter by tags", items: :string)
