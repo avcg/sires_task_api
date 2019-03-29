@@ -67,11 +67,29 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:task_attachment) do
+    %SiresTaskApi.Task.Attachment{
+      versions: [
+        %SiresTaskApi.Task.Attachment.Version{
+          file: %{file_name: "test.txt", updated_at: DateTime.utc_now()}
+        }
+      ]
+    }
+  end
+
   def build(:tag) do
     %SiresTaskApi.Tag{
       name: "Tag #{sequence()}",
       creator: build(:user),
       editor: build(:user)
+    }
+  end
+
+  def build(:upload) do
+    %Plug.Upload{
+      path: "test/files/test.txt",
+      filename: "test.txt",
+      content_type: "application/octet-stream"
     }
   end
 

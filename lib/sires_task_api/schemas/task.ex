@@ -1,8 +1,8 @@
 defmodule SiresTaskApi.Task do
   use Ecto.Schema
   import Ecto.Query
-  alias SiresTaskApi.{User, Project, Attachment, Tag}
-  alias __MODULE__.{Member, Reference, Comment}
+  alias SiresTaskApi.{User, Project, Tag}
+  alias __MODULE__.{Member, Reference, Comment, Attachment}
 
   schema "tasks" do
     field :name, :string

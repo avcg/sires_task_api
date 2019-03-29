@@ -46,7 +46,8 @@ defmodule SiresTaskApi.MixProject do
       {:guardian, "~> 1.0"},
       {:ex_operation, "~> 0.5"},
       {:bodyguard, "~> 2.2"},
-      {:phoenix_swagger, "~> 0.8"}
+      {:phoenix_swagger, "~> 0.8"},
+      {:arc_ecto, "~> 0.11.0"}
     ]
   end
 

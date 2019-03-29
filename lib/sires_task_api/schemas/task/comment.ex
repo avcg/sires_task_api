@@ -7,5 +7,7 @@ defmodule SiresTaskApi.Task.Comment do
 
     belongs_to :task, SiresTaskApi.Task
     belongs_to :author, SiresTaskApi.User
+
+    has_many :attachments, __MODULE__.Attachment
   end
 end

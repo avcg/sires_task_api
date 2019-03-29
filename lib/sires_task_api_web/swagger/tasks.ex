@@ -22,6 +22,12 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
               "Tag ids. Replaces the whole set when specified on update.",
               items: :integer
             )
+
+            attachments(
+              :array,
+              "Attachments",
+              items: Schema.ref(:TaskAttachment)
+            )
           end
         end,
       Member:
@@ -42,12 +48,34 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
             reference_type(:string, "Reference type", enum: @reference_types, required: true)
           end
         end,
+      TaskAttachment:
+        swagger_schema do
+          title("Task attachment")
+
+          properties do
+            file(:file, "File")
+          end
+        end,
       Comment:
         swagger_schema do
           title("Task comment")
 
           properties do
             text(:string, "Text", required: true)
+
+            attachments(
+              :array,
+              "Attachments",
+              items: Schema.ref(:CommentAttachment)
+            )
+          end
+        end,
+      CommentAttachment:
+        swagger_schema do
+          title("Comment attachment")
+
+          properties do
+            file(:file, "File")
           end
         end
     }
@@ -361,5 +389,52 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(401, "Unauthorized")
     response(403, "Forbidden")
     response(404, "Not Found")
+  end
+
+  swagger_path :index_attachment_versions do
+    get("/tasks/{task_id}/attachments/{attachment_id}/versions")
+    tag("Tasks")
+    summary("List attachment versions")
+    description("Available only for project members and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+      attachment_id(:path, :integer, "Attachment id", required: true)
+    end
+
+    response(200, "OK")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+  end
+
+  swagger_path :add_attachment_versions do
+    post("/tasks/{task_id}/attachments/{attachment_id}/versions")
+    tag("Tasks")
+    summary("Add task attachment version")
+    description("Available only for task assignors, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+      attachment_id(:path, :integer, "Attachment id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            member(Schema.ref(:TaskAttachment), "Attachment properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(201, "Created")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
   end
 end
