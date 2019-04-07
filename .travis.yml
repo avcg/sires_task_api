@@ -11,4 +11,4 @@ env:
 before_script:
   - mix deps.get
 script:
-  - mix mix coveralls.travis
+  - mix coveralls.travis
