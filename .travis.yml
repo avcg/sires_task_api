@@ -5,9 +5,10 @@ otp_release:
   - 21.0
 sudo: false
 env:
+  - MIX_ENV=test
   global:
     - ELIXIR_ASSERT_TIMEOUT=2000
 before_script:
   - mix deps.get
 script:
-  - mix test
+  - mix mix coveralls.travis

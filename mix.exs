@@ -10,7 +10,9 @@ defmodule SiresTaskApi.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
     ]
   end
 
@@ -47,7 +49,8 @@ defmodule SiresTaskApi.MixProject do
       {:ex_operation, "~> 0.5"},
       {:bodyguard, "~> 2.2"},
       {:phoenix_swagger, "~> 0.8"},
-      {:arc_ecto, "~> 0.11.0"}
+      {:arc_ecto, "~> 0.11.0"},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
