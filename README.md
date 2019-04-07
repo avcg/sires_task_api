@@ -1,4 +1,4 @@
-# SiresTaskApi
+# SiresTaskApi [![Build Status](https://travis-ci.com/avcg/sires_task_api.svg?branch=master)](https://travis-ci.com/avcg/sires_task_api)
 
 To start your Phoenix server:
 
