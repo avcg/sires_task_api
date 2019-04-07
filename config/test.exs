@@ -11,8 +11,8 @@ config :logger, level: :warn
 
 # Configure your database
 config :sires_task_api, SiresTaskApi.Repo,
-  username: "pavelrusakov",
-  password: "",
+  username: "postgres",
+  password: "postgres",
   database: "sires_task_api_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
