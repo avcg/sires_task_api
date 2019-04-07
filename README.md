@@ -1,4 +1,4 @@
-# SiresTaskApi [![Build Status](https://travis-ci.com/avcg/sires_task_api.svg?branch=master)](https://travis-ci.com/avcg/sires_task_api)
+# SiresTaskApi [![Build Status](https://travis-ci.com/avcg/sires_task_api.svg?branch=master)](https://travis-ci.com/avcg/sires_task_api) [![Coverage Status](https://coveralls.io/repos/github/avcg/sires_task_api/badge.svg?branch=master)](https://coveralls.io/github/avcg/sires_task_api?branch=master)
 
 To start your Phoenix server:
 
