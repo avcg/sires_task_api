@@ -18,6 +18,8 @@ defmodule SiresTaskApiWeb.Router do
     resources "/users", UserController, only: [:create]
 
     post "/sign_in", SignInController, :sign_in
+    options "/sign_in", SignInController, :options
+
   end
 
   # Protected endpoints
