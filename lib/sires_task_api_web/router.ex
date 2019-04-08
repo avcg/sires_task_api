@@ -43,10 +43,14 @@ defmodule SiresTaskApiWeb.Router do
 
     end
 
+    options "/users", UserController, :options
+
     resources "/projects", ProjectController, only: [:index, :show, :create, :update, :delete] do
       resources "/members", Project.MemberController, only: [:create, :update, :delete]
       options "/members", Project.MemberController, :options
     end
+
+    options "/projects", ProjectController, :options
 
     resources "/tasks", TaskController, only: [:index, :show, :create, :update, :delete] do
       post "/mark_undone", TaskController, :mark_undone, as: :mark_undone
@@ -69,7 +73,13 @@ defmodule SiresTaskApiWeb.Router do
         resources "/versions", Task.Attachment.VersionController, only: [:index, :create]
         options "/versions", Task.Attachment.VersionController, :options
       end
+
+      options "/attachments", Task.AttachmentController, :options
+
     end
+
+    options "/tasks", TaskController, :options
+
 
     resources "/tags", TagController, only: [:index, :create, :update, :delete]
     options "/tags", TagController, :options
