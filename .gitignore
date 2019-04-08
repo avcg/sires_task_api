@@ -36,4 +36,4 @@ sires_task_api-*.tar
 /config/*.secret.exs
 
 /uploads/
-.deliver/releases/
+/.deliver/releases/
