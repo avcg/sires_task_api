@@ -22,7 +22,7 @@ defmodule SiresTaskApi.MixProject do
   def application do
     [
       mod: {SiresTaskApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :edeliver]
     ]
   end
 
@@ -50,7 +50,9 @@ defmodule SiresTaskApi.MixProject do
       {:bodyguard, "~> 2.2"},
       {:phoenix_swagger, "~> 0.8"},
       {:arc_ecto, "~> 0.11.0"},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:edeliver, ">= 1.6.0"},
+      {:distillery, "~> 2.0", warn_missing: false}
     ]
   end
 
