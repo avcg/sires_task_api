@@ -2,6 +2,7 @@ defmodule SiresTaskApiWeb.Router do
   use SiresTaskApiWeb, :router
 
   pipeline :api do
+    plug CORSPlug, origin: "*"
     plug :accepts, ["json"]
     plug :put_resp_content_type, "application/json"
   end

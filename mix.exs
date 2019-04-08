@@ -52,7 +52,8 @@ defmodule SiresTaskApi.MixProject do
       {:arc_ecto, "~> 0.11.0"},
       {:excoveralls, "~> 0.10", only: :test},
       {:edeliver, ">= 1.6.0"},
-      {:distillery, "~> 2.0", warn_missing: false}
+      {:distillery, "~> 2.0", warn_missing: false},
+      {:cors_plug, "~> 1.5"}
     ]
   end
 
