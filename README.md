@@ -15,7 +15,7 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ## Deps
 
-'''elixir
+```elixir
   defp deps do
     [
       {:phoenix, "~> 1.4.1"},
@@ -38,4 +38,4 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
       {:distillery, "~> 2.0", warn_missing: false}
     ]
   end
-'''
+```
