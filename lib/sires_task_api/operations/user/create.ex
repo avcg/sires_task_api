@@ -8,13 +8,23 @@ defmodule SiresTaskApi.User.Create do
 
   def call(op) do
     op
-    |> step(:create_user, fn _ -> create_user(op.params.user) end)
+    |> step(:create_project, fn _ -> create_project() end)
+    |> step(:create_user, &create_user(op.params.user, &1.create_project))
+    |> step(:create_member, &create_member(&1.create_user, &1.create_project))
   end
 
-  defp create_user(params) do
-    %User{}
+  defp create_project do
+    %Project{name: @inbox_project_name} |> Repo.insert()
+  end
+
+  defp create_user(params, project) do
+    %User{inbox_project: project}
     |> User.SharedHelpers.changeset(params)
-    |> Ecto.Changeset.put_assoc(:inbox_project, %Project{name: @inbox_project_name})
+    |> Repo.insert()
+  end
+
+  defp create_member(user, project) do
+    %Project.Member{user: user, project: project, role: "admin"}
     |> Repo.insert()
   end
 end
