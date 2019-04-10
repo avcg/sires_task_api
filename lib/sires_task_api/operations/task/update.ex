@@ -8,6 +8,7 @@ defmodule SiresTaskApi.Task.Update do
         start_time: :utc_datetime,
         finish_time: :utc_datetime,
         tag_ids: {:array, :integer},
+        project_id: :integer,
         attachments: [%{file: SiresTaskApi.Attachment}]
       }
     }

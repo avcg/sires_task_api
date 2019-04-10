@@ -6,7 +6,7 @@ defmodule SiresTaskApi.Task.SharedHelpers do
 
   def changeset(%Task{} = struct, attrs, tags) do
     struct
-    |> cast(attrs, [:name, :description, :start_time, :finish_time])
+    |> cast(attrs, [:name, :description, :start_time, :finish_time, :project_id])
     |> cast_assoc(:attachments,
       with: fn struct, attrs ->
         # Save attachment version with empty `file` field so far. See explanation below.
