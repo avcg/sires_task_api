@@ -44,5 +44,6 @@ defmodule SiresTaskApiWeb.Endpoint do
     key: "_sires_task_api_key",
     signing_salt: "VH0diOI2"
 
+  plug CORSPlug, origin: "*"
   plug SiresTaskApiWeb.Router
 end
