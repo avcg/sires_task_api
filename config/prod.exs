@@ -14,7 +14,8 @@ config :sires_task_api, SiresTaskApiWeb.Endpoint,
   url: [host: "91.134.24.233", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
-  code_reloader: false
+  code_reloader: false,
+  secret_key_base: "notreal4eG460CU9/2x68+hGBjJ5DIJ8YSxNeb6/S/uY8bm0x5VlpN4VsYtSwR3sqmdXt"
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -71,4 +72,11 @@ config :phoenix, :serve_endpoints, true
 
 # Finally import the config/prod.secret.exs which should be versioned
 # separately.
-import_config "prod.secret.exs"
+#import_config "prod.secret.exs"
+
+config :sires_task_api, SiresTaskApi.Repo,
+  username: "postgres",
+  password: "postgres",
+  database: "sires_task_api_prod",
+  hostname: "localhost",
+  pool_size: 10
