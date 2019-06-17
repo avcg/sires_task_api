@@ -18,14 +18,14 @@ defmodule SiresTaskApiWeb.UserController do
   end
 
   def create(conn, params) do
-    with {:ok, %{create_user: user}} <- User.Create |> run(conn, params),
+    with {:ok, %{upload_avatar: user}} <- User.Create |> run(conn, params),
          {:ok, token, _claims} <- SiresTaskApiWeb.Guardian.encode_and_sign(user) do
       conn |> put_status(:created) |> render(user: user, jwt: token)
     end
   end
 
   def update(conn, params) do
-    with {:ok, %{update_user: user}} <- User.Update |> run(conn, params) do
+    with {:ok, %{upload_avatar: user}} <- User.Update |> run(conn, params) do
       conn |> render(:show, user: user)
     end
   end

@@ -93,6 +93,14 @@ defmodule SiresTaskApi.TestFactory do
     }
   end
 
+  def build(:avatar_upload) do
+    %Plug.Upload{
+      path: "test/files/avatar.jpg",
+      filename: "avatar.jpg",
+      content_type: "image/jpeg"
+    }
+  end
+
   def build(factory_name, attrs) do
     factory_name |> build() |> struct(attrs)
   end

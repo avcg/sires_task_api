@@ -11,6 +11,11 @@ defmodule SiresTaskApiWeb.Swagger.Users do
             email(:string, "Email", required: true)
             password(:string, "Password", required: true)
             role(:string, "Role (only admins can change it)", enum: ~w(regular admin))
+            first_name(:string, "First name")
+            middle_name(:string, "First name")
+            last_name(:string, "Last name")
+            position(:string, "Position")
+            avatar(:file, "Avatar")
           end
         end
     }

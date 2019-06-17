@@ -61,7 +61,15 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
 
   describe "POST /api/v1/users" do
     test "renders user when data is valid", ctx do
-      params = %{email: "some@email.com", password: "some password"}
+      params = %{
+        email: "some@email.com",
+        password: "some password",
+        first_name: "John",
+        middle_name: "Petrovich",
+        last_name: "Doe",
+        position: "Supreme Chief Jacket Officer",
+        avatar: build(:avatar_upload)
+      }
 
       response =
         ctx.conn
@@ -69,7 +77,16 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
         |> json_response(201)
 
       assert %{
-               "user" => %{"id" => _, "email" => "some@email.com", "inbox_project_id" => _},
+               "user" => %{
+                 "id" => _,
+                 "email" => "some@email.com",
+                 "inbox_project_id" => _,
+                 "first_name" => "John",
+                 "middle_name" => "Petrovich",
+                 "last_name" => "Doe",
+                 "position" => "Supreme Chief Jacket Officer",
+                 "avatar" => "/uploads/avatars/" <> _
+               },
                "jwt" => _
              } = response
     end
@@ -87,7 +104,16 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
   describe "PUT /api/v1/users/:id" do
     test "update user profile", ctx do
       user = insert!(:user)
-      params = %{email: "new@example.com", password: "9876543210"}
+
+      params = %{
+        email: "new@example.com",
+        password: "9876543210",
+        first_name: "John",
+        middle_name: "Petrovich",
+        last_name: "Doe",
+        position: "Supreme Chief Jacket Officer",
+        avatar: build(:avatar_upload)
+      }
 
       response =
         ctx.conn
@@ -96,6 +122,11 @@ defmodule SiresTaskApiWeb.UserEndpointTest do
         |> json_response(200)
 
       assert response["user"]["email"] == params.email
+      assert response["user"]["first_name"] == "John"
+      assert response["user"]["middle_name"] == "Petrovich"
+      assert response["user"]["last_name"] == "Doe"
+      assert response["user"]["position"] == "Supreme Chief Jacket Officer"
+      assert response["user"]["avatar"] == "/uploads/avatars/#{user.id}/thumb.jpg"
 
       # Try to sign in with the new password
       ctx.conn
