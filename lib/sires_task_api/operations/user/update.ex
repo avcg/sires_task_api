@@ -1,6 +1,18 @@
 defmodule SiresTaskApi.User.Update do
   use SiresTaskApi.Operation,
-    params: %{id!: :integer, user!: %{email: :string, password: :string, role: :string}}
+    params: %{
+      id!: :integer,
+      user!: %{
+        email: :string,
+        password: :string,
+        role: :string,
+        first_name: :string,
+        middle_name: :string,
+        last_name: :string,
+        position: :string,
+        avatar: SiresTaskApi.Attachment
+      }
+    }
 
   alias SiresTaskApi.{Repo, User, UserPolicy}
 
@@ -12,6 +24,9 @@ defmodule SiresTaskApi.User.Update do
       user
       |> User.SharedHelpers.changeset(op.params.user, admin: op.context.user.role == "admin")
       |> Repo.update()
+    end)
+    |> step(:upload_avatar, fn %{update_user: user} ->
+      user |> User.SharedHelpers.upload_avatar(op.params.user[:avatar])
     end)
   end
 end

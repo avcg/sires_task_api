@@ -2,6 +2,9 @@ defmodule SiresTaskApi.Tag.IndexQuery do
   use SiresTaskApi.Query
 
   def build_query(_user, dynamic, _opts) do
-    SiresTaskApi.Tag |> where(^dynamic) |> order_by(:name)
+    SiresTaskApi.Tag
+    |> where(^dynamic)
+    |> order_by(:name)
+    |> preload([:creator, :editor])
   end
 end

@@ -1,5 +1,6 @@
 defmodule SiresTaskApiWeb.UserView do
   use SiresTaskApiWeb, :view
+  alias SiresTaskApi.User.Avatar
 
   def render("index.json", %{users: users, pagination: pagination}) do
     %{users: Enum.map(users, &user/1), total_count: pagination.total_count}
@@ -16,8 +17,12 @@ defmodule SiresTaskApiWeb.UserView do
     |> Map.put(:jwt, jwt)
   end
 
+  @fields ~w(id email active role inbox_project_id inserted_at updated_at first_name middle_name
+             last_name position)a
+
   def user(user) do
     user
-    |> Map.take([:id, :email, :active, :role, :inbox_project_id, :inserted_at, :updated_at])
+    |> Map.take(@fields)
+    |> Map.put(:avatar, Avatar.url({user.avatar, user}, :thumb, signed: true))
   end
 end
