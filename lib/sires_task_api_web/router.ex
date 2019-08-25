@@ -16,11 +16,9 @@ defmodule SiresTaskApiWeb.Router do
     pipe_through :api
 
     resources "/users", UserController, only: [:create]
-    options "/users", UserController, :options
 
     post "/sign_in", SignInController, :sign_in
     options "/sign_in", SignInController, :options
-
   end
 
   # Protected endpoints
@@ -34,13 +32,11 @@ defmodule SiresTaskApiWeb.Router do
     options "/tasks/calendar", TaskController, :options
 
     resources "/users", UserController, only: [:index, :show, :update] do
-
       post "/deactivate", UserController, :deactivate, as: :deactivate
       options "/deactivate", UserController, :options
 
       post "/activate", UserController, :activate, as: :activate
       options "/activate", UserController, :options
-
     end
 
     options "/users", UserController, :options
@@ -64,7 +60,6 @@ defmodule SiresTaskApiWeb.Router do
       resources "/members", Task.MemberController, only: [:create, :delete]
       options "/members", Task.MemberController, :options
 
-
       resources "/references", Task.ReferenceController, only: [:create, :delete]
       options "/references", Task.ReferenceController, :options
 
@@ -77,7 +72,6 @@ defmodule SiresTaskApiWeb.Router do
       end
 
       options "/attachments", Task.AttachmentController, :options
-
     end
 
     options "/tasks", TaskController, :options

@@ -10,7 +10,8 @@ defmodule SiresTaskApi.User.Update do
         middle_name: :string,
         last_name: :string,
         position: :string,
-        avatar: SiresTaskApi.Attachment
+        avatar: SiresTaskApi.Attachment,
+        locale: :string
       }
     }
 

@@ -3,7 +3,7 @@ defmodule SiresTaskApi.User.SharedHelpers do
   import Arc.Ecto.Schema
 
   def changeset(user, attrs, opts \\ []) do
-    fields = ~w(email password first_name middle_name last_name position)a
+    fields = ~w(email password first_name middle_name last_name position locale)a
     fields = if opts[:admin], do: fields ++ [:role], else: fields
 
     user
@@ -15,6 +15,7 @@ defmodule SiresTaskApi.User.SharedHelpers do
     |> validate_length(:middle_name, max: 255)
     |> validate_length(:last_name, max: 255)
     |> validate_length(:position, max: 255)
+    |> validate_inclusion(:locale, Gettext.known_locales(SiresTaskApi.Gettext))
     |> unique_constraint(:email, name: :users_lower_email_index)
     |> put_password_hash()
   end

@@ -13,8 +13,13 @@ defmodule SiresTaskApi.User do
     field :last_name, :string
     field :position, :string
     field :avatar, __MODULE__.Avatar.Type
+    field :locale, :string
     timestamps()
 
     belongs_to :inbox_project, SiresTaskApi.Project
+  end
+
+  def full_name(%__MODULE__{first_name: first, middle_name: middle, last_name: last}) do
+    [first, middle, last] |> Enum.join(" ")
   end
 end

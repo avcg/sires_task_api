@@ -18,7 +18,7 @@ defmodule SiresTaskApiWeb.UserView do
   end
 
   @fields ~w(id email active role inbox_project_id inserted_at updated_at first_name middle_name
-             last_name position)a
+             last_name position locale)a
 
   def user(user) do
     user

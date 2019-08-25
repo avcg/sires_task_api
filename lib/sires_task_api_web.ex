@@ -22,7 +22,7 @@ defmodule SiresTaskApiWeb do
       use Phoenix.Controller, namespace: SiresTaskApiWeb
 
       import Plug.Conn
-      import SiresTaskApiWeb.Gettext
+      import SiresTaskApi.Gettext
       alias SiresTaskApiWeb.Router.Helpers, as: Routes
       alias SiresTaskApiWeb.Controller.Helpers.Pagination
 
@@ -45,7 +45,7 @@ defmodule SiresTaskApiWeb do
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
 
       import SiresTaskApiWeb.ErrorHelpers
-      import SiresTaskApiWeb.Gettext
+      import SiresTaskApi.Gettext
       alias SiresTaskApiWeb.Router.Helpers, as: Routes
     end
   end
@@ -61,7 +61,7 @@ defmodule SiresTaskApiWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import SiresTaskApiWeb.Gettext
+      import SiresTaskApi.Gettext
     end
   end
 
