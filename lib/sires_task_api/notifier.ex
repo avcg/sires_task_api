@@ -84,16 +84,15 @@ defmodule SiresTaskApi.Notifier do
   end
 
   defp notify(op_mod, txn) do
-    authorizer =
-      if function_exported?(op_mod, :authorize_notification, 2) do
-        fn users, txn -> apply(op_mod, :authorize_notification, [users, txn]) end
-      end
+    operation = SiresTaskApi.Operation.dump(op_mod)
 
     for {media_key, media_mod} <- @media do
       users = media_key |> to_string() |> subscribers(op_mod)
 
-      if is_nil(authorizer) || authorizer.(users, txn) do
-        for user <- users, do: apply(media_mod, :notify, [user, op_mod, txn])
+      for user <- users do
+        if __MODULE__.Policy.Root.notify?(operation, user, txn) do
+          apply(media_mod, :notify, [user, op_mod, txn])
+        end
       end
     end
   end

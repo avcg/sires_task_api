@@ -14,7 +14,7 @@ defmodule SiresTaskApi.NotificationSubscription.Create do
   def build(op) do
     op
     |> step(:authorize, fn _ ->
-        authorize(op.context.user, op.params.notification_subscriptions.operations)
+      authorize(op.context.user, op.params.notification_subscriptions.operations)
     end)
     |> step(:create_notification_subscriptions, fn _ ->
       create_notification_subscriptions(op.params.notification_subscriptions, op.context.user)

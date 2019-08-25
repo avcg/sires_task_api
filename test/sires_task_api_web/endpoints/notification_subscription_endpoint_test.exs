@@ -25,12 +25,12 @@ defmodule SiresTaskApiWeb.NotificationSubscriptionEndpointTest do
 
   describe "POST /api/v1/notification_subscriptions" do
     test "create notification subscriptions", ctx do
-        insert!(
-          :notification_subscription,
-          user: ctx.user,
-          media: "email",
-          operation: "Task.Create"
-        )
+      insert!(
+        :notification_subscription,
+        user: ctx.user,
+        media: "email",
+        operation: "Task.Create"
+      )
 
       params = %{media: "email", operations: ~w(Task.Create Task.Update)}
 

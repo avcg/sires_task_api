@@ -35,8 +35,7 @@ config :arc, storage: Arc.Storage.Local
 
 config :sires_task_api, SiresTaskApi.Gettext, default_locale: "en"
 
-config :sires_task_api, SiresTaskApi.Notifier,
-  media: [SiresTaskApi.Notifier.Media.Email]
+config :sires_task_api, SiresTaskApi.Notifier, media: [SiresTaskApi.Notifier.Media.Email]
 
 config :sires_task_api, SiresTaskApi.Notifier.Media.Email,
   from_email: {"Sires Tasker", "noreply@sirestasker.com"}

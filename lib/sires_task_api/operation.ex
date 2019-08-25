@@ -1,11 +1,7 @@
 defmodule SiresTaskApi.Operation do
   import ExOperation.DSL
 
-  alias SiresTaskApi.User
-
   @callback build(op :: ExOperation.Operation.t()) :: ExOperation.Operation.t()
-  @callback authorize_notification?(users :: [User.t()], txn :: map()) :: [User.t()]
-  @optional_callbacks [authorize_notification?: 2]
 
   defmacro __using__(opts) do
     quote do

@@ -6,7 +6,7 @@ defmodule SiresTaskApi.User.SharedHelpers do
     Ecto.Changeset.validate_change(
       changeset,
       :user,
-      fn :user, changeset  ->
+      fn :user, changeset ->
         changeset
         |> Ecto.Changeset.validate_inclusion(:locale, Gettext.known_locales(SiresTaskApi.Gettext))
         |> Map.fetch!(:errors)
