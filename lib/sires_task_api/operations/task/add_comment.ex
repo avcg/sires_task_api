@@ -8,7 +8,7 @@ defmodule SiresTaskApi.Task.AddComment do
   alias SiresTaskApi.{Repo, Task, CommentPolicy}
   import Task.SharedHelpers
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:task, schema: Task, id_path: [:task_id], preloads: [:project])
     |> authorize(:task, policy: CommentPolicy, action: :create)

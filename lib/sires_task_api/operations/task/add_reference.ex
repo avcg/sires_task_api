@@ -4,7 +4,7 @@ defmodule SiresTaskApi.Task.AddReference do
 
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:parent_task, schema: Task, id_path: [:task_id], preloads: [:project])
     |> authorize(:parent_task, policy: TaskPolicy, action: :update)

@@ -1,0 +1,5 @@
+msgid "New task \"%{task}\" in project \"%{project}\""
+msgstr "Новая задача \"%{task}\" в проекте \"%{project}\""
+
+msgid "Task \"%{task}\" from project \"%{project}\" updated"
+msgstr "Задача \"%{task}\" из проекта \"%{project}\" обновлена"

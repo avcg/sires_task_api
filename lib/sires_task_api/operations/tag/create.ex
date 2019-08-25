@@ -2,7 +2,7 @@ defmodule SiresTaskApi.Tag.Create do
   use SiresTaskApi.Operation, params: %{tag!: %{name!: :string}}
   alias SiresTaskApi.{Repo, Tag, TagPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> step(:authorize, fn _ -> authorize(op.context.user) end)
     |> step(:create_tag, fn _ -> create_tag(op.params.tag, op.context.user) end)

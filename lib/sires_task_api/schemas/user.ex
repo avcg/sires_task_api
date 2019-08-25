@@ -17,9 +17,10 @@ defmodule SiresTaskApi.User do
     timestamps()
 
     belongs_to :inbox_project, SiresTaskApi.Project
+    has_many :notification_subscriptions, SiresTaskApi.NotificationSubscription
   end
 
   def full_name(%__MODULE__{first_name: first, middle_name: middle, last_name: last}) do
-    [first, middle, last] |> Enum.join(" ")
+    [first, middle, last] |> Stream.filter(& &1) |> Enum.join(" ")
   end
 end

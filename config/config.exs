@@ -35,6 +35,12 @@ config :arc, storage: Arc.Storage.Local
 
 config :sires_task_api, SiresTaskApi.Gettext, default_locale: "en"
 
+config :sires_task_api, SiresTaskApi.Notifier,
+  media: [SiresTaskApi.Notifier.Media.Email]
+
+config :sires_task_api, SiresTaskApi.Notifier.Media.Email,
+  from_email: {"Sires Tasker", "noreply@sirestasker.com"}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

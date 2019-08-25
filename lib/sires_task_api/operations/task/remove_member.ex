@@ -2,7 +2,7 @@ defmodule SiresTaskApi.Task.RemoveMember do
   use SiresTaskApi.Operation, params: %{task_id!: :integer, id!: :integer, role!: :string}
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:task, schema: Task, id_path: [:task_id], preloads: [:project])
     |> authorize(:task, policy: TaskPolicy, action: :update)

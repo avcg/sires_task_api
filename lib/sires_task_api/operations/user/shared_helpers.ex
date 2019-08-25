@@ -2,6 +2,18 @@ defmodule SiresTaskApi.User.SharedHelpers do
   import Ecto.Changeset
   import Arc.Ecto.Schema
 
+  def validate_params(changeset) do
+    Ecto.Changeset.validate_change(
+      changeset,
+      :user,
+      fn :user, changeset  ->
+        changeset
+        |> Ecto.Changeset.validate_inclusion(:locale, Gettext.known_locales(SiresTaskApi.Gettext))
+        |> Map.fetch!(:errors)
+      end
+    )
+  end
+
   def changeset(user, attrs, opts \\ []) do
     fields = ~w(email password first_name middle_name last_name position locale)a
     fields = if opts[:admin], do: fields ++ [:role], else: fields

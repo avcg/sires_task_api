@@ -54,3 +54,5 @@ config :sires_task_api, SiresTaskApi.Repo,
   database: "sires_task_api_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :sires_task_api, SiresTaskApi.Mailer, adapter: Bamboo.LocalAdapter

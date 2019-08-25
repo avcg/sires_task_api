@@ -1,0 +1,4 @@
+<%= gettext(
+      ~s[Task "%{task}" from project "%{project}" updated],
+      task: txn.update_task.name,
+      project: txn.update_task.project.name) %>

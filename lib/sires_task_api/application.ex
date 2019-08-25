@@ -11,10 +11,17 @@ defmodule SiresTaskApi.Application do
       # Start the Ecto repository
       SiresTaskApi.Repo,
       # Start the endpoint when the application starts
-      SiresTaskApiWeb.Endpoint
+      SiresTaskApiWeb.Endpoint,
       # Starts a worker by calling: SiresTaskApi.Worker.start_link(arg)
       # {SiresTaskApi.Worker, arg},
+      {Phoenix.PubSub.PG2, name: SiresTaskApi.DomainPubSub},
     ]
+
+    children = if Mix.env() == :test do
+      children
+    else
+      children ++ [SiresTaskApi.Notifier]
+    end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

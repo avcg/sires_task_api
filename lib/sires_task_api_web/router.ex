@@ -9,6 +9,7 @@ defmodule SiresTaskApiWeb.Router do
 
   pipeline :protected do
     plug SiresTaskApiWeb.Guardian.AuthPipeline
+    plug SiresTaskApiWeb.PutLocale
   end
 
   # Public endpoints
@@ -79,6 +80,12 @@ defmodule SiresTaskApiWeb.Router do
 
     resources "/tags", TagController, only: [:index, :create, :update, :delete]
     options "/tags", TagController, :options
+
+    resources "/notification_subscriptions", NotificationSubscriptionController,
+      only: [:index, :create]
+
+    delete "/notification_subscriptions", NotificationSubscriptionController, :delete
+    options "/notification_subscriptions", NotificationSubscriptionController, :options
   end
 
   # Swagger (API live documentation)

@@ -17,7 +17,9 @@ defmodule SiresTaskApi.User.Update do
 
   alias SiresTaskApi.{Repo, User, UserPolicy}
 
-  def call(op) do
+  defdelegate validate_params(changeset), to: User.SharedHelpers
+
+  def build(op) do
     op
     |> find(:user, schema: User)
     |> authorize(:user, policy: UserPolicy, action: :update)

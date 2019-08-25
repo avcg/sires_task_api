@@ -15,7 +15,7 @@ defmodule SiresTaskApi.Task.Create do
   alias SiresTaskApi.{Repo, Task, Project, TaskPolicy}
   import Task.SharedHelpers
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:project, schema: Project, id_path: [:task, :project_id])
     |> authorize(:project, policy: TaskPolicy, action: :create)

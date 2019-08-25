@@ -16,3 +16,5 @@ config :sires_task_api, SiresTaskApi.Repo,
   database: "sires_task_api_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :sires_task_api, SiresTaskApi.Mailer, adapter: Bamboo.TestAdapter

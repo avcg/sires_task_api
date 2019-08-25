@@ -16,11 +16,11 @@ defmodule SiresTaskApi.User.Create do
 
   alias SiresTaskApi.{Repo, User, Project}
 
-  @inbox_project_name "Входящие"
+  defdelegate validate_params(changeset), to: User.SharedHelpers
 
-  def call(op) do
+  def build(op) do
     op
-    |> step(:create_project, fn _ -> create_project() end)
+    |> step(:create_project, fn _ -> create_project(op.params) end)
     |> step(:create_user, &create_user(op.params.user, &1.create_project))
     |> step(:create_member, &create_member(&1.create_user, &1.create_project))
     |> step(:upload_avatar, fn %{create_user: user} ->
@@ -28,8 +28,12 @@ defmodule SiresTaskApi.User.Create do
     end)
   end
 
-  defp create_project do
-    %Project{name: @inbox_project_name} |> Repo.insert()
+  defp create_project(params) do
+    locale = params[:locale] || Gettext.get_locale(SiresTaskApi.Gettext)
+
+    Gettext.with_locale(SiresTaskApi.Gettext, locale, fn ->
+      %Project{name: Gettext.gettext(SiresTaskApi.Gettext, "Inbox")} |> Repo.insert()
+    end)
   end
 
   defp create_user(params, project) do
