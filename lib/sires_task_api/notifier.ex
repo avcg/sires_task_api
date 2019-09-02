@@ -6,6 +6,7 @@ defmodule SiresTaskApi.Notifier do
 
   @media %{email: __MODULE__.Media.Email}
   @templates_base_path Path.join(~w(lib sires_task_api notifier templates))
+  @layouts_path Path.join(@templates_base_path, "layout")
   @formats ~w(subject html text)a
   @ext_map @formats |> Enum.map(&{".#{&1}", &1}) |> Map.new()
 
@@ -23,6 +24,7 @@ defmodule SiresTaskApi.Notifier do
   @templates @templates_base_path
              |> Path.join("**/*.eex")
              |> Path.wildcard()
+             |> Stream.reject(&String.starts_with?(&1, @layouts_path))
              |> Stream.map(fn path ->
                rel_path = path |> Path.relative_to(@templates_base_path)
                basename = rel_path |> Path.basename(".eex")
@@ -56,6 +58,16 @@ defmodule SiresTaskApi.Notifier do
 
                {mod, templates}
              end)
+
+  @layouts @layouts_path
+           |> Path.join("*.eex")
+           |> Path.wildcard()
+           |> Enum.into(%{}, fn path ->
+             name = Path.basename(path)
+             fun = :"render_layout_#{name}"
+             EEx.function_from_file(:def, fun, path, [:content])
+             {name, fun}
+           end)
 
   @available_operations for {op_mod, _} <- @templates, do: SiresTaskApi.Operation.dump(op_mod)
   def available_operations, do: @available_operations
@@ -104,6 +116,10 @@ defmodule SiresTaskApi.Notifier do
 
   def render_template(op_mod, key, txn: txn, user: user) do
     apply(__MODULE__, @templates[op_mod][key], [txn, user])
+  end
+
+  def render_layout(layout, content) do
+    apply(__MODULE__, @layouts[layout], [content])
   end
 
   def gettext(msgid, bindings) do
