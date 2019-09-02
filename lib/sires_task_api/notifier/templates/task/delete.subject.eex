@@ -1,0 +1,5 @@
+<%= gettext(
+      ~s[Task "%{task}" from project "%{project}" deleted],
+      task: txn.create_task.name,
+      project: txn.project.name
+    ) %>

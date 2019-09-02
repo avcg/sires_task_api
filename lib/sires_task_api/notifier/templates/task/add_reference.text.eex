@@ -1,0 +1,3 @@
+<%= gettext("Project: %{project}", project: txn.parent_task.project.name) %>
+<%= gettext("Parent task: %{task}", task: txn.parent_task.name) %>
+<%= gettext("Child task: %{task}", task: txn.child_task.name) %>

@@ -1,0 +1,5 @@
+<%= gettext(
+      ~s[New attachment version "%{task}" in project "%{project}"],
+      task: txn.task.name,
+      project: txn.task.project.name
+    ) %>

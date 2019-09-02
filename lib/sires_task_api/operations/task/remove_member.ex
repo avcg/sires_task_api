@@ -12,7 +12,7 @@ defmodule SiresTaskApi.Task.RemoveMember do
 
   defp find_member(task, user_id, role) do
     case Task.Member |> Repo.get_by(task_id: task.id, user_id: user_id, role: role) do
-      %Task.Member{} = member -> {:ok, member}
+      %Task.Member{} = member -> {:ok, Repo.preload(member, [:user])}
       nil -> {:error, :not_found}
     end
   end
