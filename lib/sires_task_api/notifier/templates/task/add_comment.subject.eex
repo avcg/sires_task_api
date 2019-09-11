@@ -1,0 +1,6 @@
+<%= gettext(
+      ~s[%{author} commented on "%{task}" in project "%{project}"],
+      author: SiresTaskApi.User.full_name(txn.add_comment.author),
+      task: txn.task.name,
+      project: txn.task.project.name
+    ) %>

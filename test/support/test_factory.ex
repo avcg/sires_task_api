@@ -5,6 +5,7 @@ defmodule SiresTaskApi.TestFactory do
     %SiresTaskApi.User{
       email: "user#{sequence()}@example.com",
       password_hash: Comeonin.Bcrypt.hashpwsalt("12345"),
+      locale: "en",
       inbox_project: build(:project, name: "Inbox")
     }
   end
@@ -82,6 +83,14 @@ defmodule SiresTaskApi.TestFactory do
       name: "Tag #{sequence()}",
       creator: build(:user),
       editor: build(:user)
+    }
+  end
+
+  def build(:notification_subscription) do
+    %SiresTaskApi.NotificationSubscription{
+      user: build(:user),
+      operation: "User.Update",
+      media: "email"
     }
   end
 

@@ -9,7 +9,7 @@ defmodule SiresTaskApi.Task.ChangeComment do
   alias SiresTaskApi.{Repo, Task, CommentPolicy}
   import Task.SharedHelpers
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:comment, schema: Task.Comment, preloads: [:attachments, task: :project])
     |> step(:ensure_task_id, &ensure_task_id(&1.comment, op.params.task_id))

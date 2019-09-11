@@ -4,7 +4,7 @@ defmodule SiresTaskApi.Task.AddMember do
 
   alias SiresTaskApi.{Repo, User, Task, TaskPolicy, ProjectPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:task, schema: Task, id_path: [:task_id], preloads: [:project])
     |> authorize(:task, policy: TaskPolicy, action: :update)

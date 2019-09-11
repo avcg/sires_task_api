@@ -2,7 +2,7 @@ defmodule SiresTaskApi.User.ToggleActive do
   use SiresTaskApi.Operation, params: %{id!: :integer, active!: :boolean}
   alias SiresTaskApi.{Repo, User, UserPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:user, schema: User)
     |> authorize(:user, policy: UserPolicy, action: :toggle_active)

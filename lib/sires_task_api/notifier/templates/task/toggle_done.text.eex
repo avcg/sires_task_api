@@ -1,0 +1,2 @@
+<%= gettext("Project: %{project}", project: txn.project.name) %>
+<%= gettext("Task: %{task}", task: txn.create_task.name) %>

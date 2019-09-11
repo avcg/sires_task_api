@@ -1,0 +1,47 @@
+msgid "New task \"%{task}\" in project \"%{project}\""
+msgstr "Новая задача \"%{task}\" в проекте \"%{project}\""
+
+msgid "Task \"%{task}\" from project \"%{project}\" updated"
+msgstr "Задача \"%{task}\" из проекта \"%{project}\" обновлена"
+
+msgid "New attachment version \"%{task}\" in project \"%{project}\""
+msgstr "Новая версия вложения в задаче \"%{task}\" в проекте \"%{project}\""
+
+msgid "%{author} commented on \"%{task}\" in project \"%{project}\""
+msgstr "%{author} добавил комментарий к задаче \"%{task}\" в проекте \"%{project}\""
+
+msgid "%{user} added to \"%{task}\" in project \"%{project}\""
+msgstr "%{user} добавлен участником к задаче \"%{task}\" в проекте \"%{project}\""
+
+msgid "Task \"%{child_task}\" referenced in \"%{parent_task}\" in project \"%{project}\""
+msgstr "Задача \"%{child_task}\" связана с задачей \"%{parent_task}\" в проекте \"%{project}\""
+
+msgid "Task \"%{task}\" from project \"%{project}\" deleted"
+msgstr "Задача \"%{task}\" из проекта \"%{project}\" удалена"
+
+msgid "%{user} removed from \"%{task}\" in project \"%{project}\""
+msgstr "%{user} удалён из задачи \"%{task}\" в проекте \"%{project}\""
+
+msgid "Task \"%{task}\" in project \"%{project}\" completed"
+msgstr "Задача \"%{task}\" в проекте \"%{project}\" завершена"
+
+msgid "Task \"%{task}\" in project \"%{project}\" put back to work"
+msgstr "Задача \"%{task}\" в проекте \"%{project}\" возвращена в работу"
+
+msgid "Project: %{project}"
+msgstr "Проект: %{project}"
+
+msgid "Task: %{task}"
+msgstr "Задача: %{task}"
+
+msgid "Author: %{author}"
+msgstr "Автор: %{author}"
+
+msgid "User: %{user}"
+msgstr "Пользователь: %{user}"
+
+msgid "Parent task: %{task}"
+msgstr "Родительская задача: %{task}"
+
+msgid "Child task: %{task}"
+msgstr "Связанная задача: %{task}"

@@ -16,6 +16,7 @@ defmodule SiresTaskApiWeb.Swagger.Users do
             last_name(:string, "Last name")
             position(:string, "Position")
             avatar(:file, "Avatar")
+            locale(:string, "Locale", enum: Gettext.known_locales(SiresTaskApi.Gettext))
           end
         end
     }

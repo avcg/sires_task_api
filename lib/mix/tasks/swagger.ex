@@ -21,8 +21,7 @@ defmodule Mix.Tasks.Swagger do
   end
 
   defp app_path do
-    Mix.Project.load_paths()
-    |> Enum.at(0)
+    Mix.Project.compile_path()
     |> String.split("_build")
     |> Enum.at(0)
   end

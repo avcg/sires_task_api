@@ -9,7 +9,7 @@ defmodule SiresTaskApi.Task.AddAttachmentVersion do
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
   import Task.SharedHelpers
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:task, schema: Task, id_path: [:task_id], preloads: [:project])
     |> authorize(:task, policy: TaskPolicy, action: :update)

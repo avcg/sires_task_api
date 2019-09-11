@@ -2,7 +2,7 @@ defmodule SiresTaskApi.Project.Create do
   use SiresTaskApi.Operation, params: %{project!: %{name!: :string}}
   alias SiresTaskApi.{Repo, Project}
 
-  def call(op) do
+  def build(op) do
     op
     |> step(:create_project, fn _ -> create_project(op.params.project, op.context.user) end)
   end

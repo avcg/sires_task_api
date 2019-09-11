@@ -1,0 +1,47 @@
+msgid "New task \"%{task}\" in project \"%{project}\""
+msgstr ""
+
+msgid "Task \"%{task}\" from project \"%{project}\" updated"
+msgstr ""
+
+msgid "New attachment version \"%{task}\" in project \"%{project}\""
+msgstr ""
+
+msgid "%{author} commented on \"%{task}\" in project \"%{project}\""
+msgstr ""
+
+msgid "%{user} added to \"%{task}\" in project \"%{project}\""
+msgstr ""
+
+msgid "Task \"%{child_task}\" referenced in \"%{parent_task}\" in project \"%{project}\""
+msgstr ""
+
+msgid "Task \"%{task}\" from project \"%{project}\" deleted"
+msgstr ""
+
+msgid "%{user} removed from \"%{task}\" in project \"%{project}\""
+msgstr ""
+
+msgid "Task \"%{task}\" in project \"%{project}\" completed"
+msgstr ""
+
+msgid "Task \"%{task}\" in project \"%{project}\" put back to work"
+msgstr ""
+
+msgid "Project: %{project}"
+msgstr ""
+
+msgid "Task: %{task}"
+msgstr ""
+
+msgid "Author: %{author}"
+msgstr ""
+
+msgid "User: %{user}"
+msgstr ""
+
+msgid "Parent task: %{task}"
+msgstr ""
+
+msgid "Child task: %{task}"
+msgstr ""

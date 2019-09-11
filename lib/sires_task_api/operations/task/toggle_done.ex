@@ -2,7 +2,7 @@ defmodule SiresTaskApi.Task.ToggleDone do
   use SiresTaskApi.Operation, params: %{id!: :integer, done!: :boolean}
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:task, schema: Task, preloads: [:project])
     |> authorize(:task, policy: TaskPolicy, action: :toggle_done)

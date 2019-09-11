@@ -1,0 +1,6 @@
+<%= gettext(
+      ~s[%{user} removed from "%{task}" in project "%{project}"],
+      user: SiresTaskApi.User.full_name(txn.member.user),
+      task: txn.task.name,
+      project: txn.task.project.name
+    ) %>

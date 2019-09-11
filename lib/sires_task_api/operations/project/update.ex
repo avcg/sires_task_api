@@ -2,7 +2,7 @@ defmodule SiresTaskApi.Project.Update do
   use SiresTaskApi.Operation, params: %{id!: :integer, project!: %{name!: :string}}
   alias SiresTaskApi.{Repo, Project, ProjectPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:project, schema: Project, preloads: [:editor])
     |> authorize(:project, policy: ProjectPolicy, action: :update)

@@ -1,0 +1,6 @@
+<%= gettext(
+      ~s[Task "%{child_task}" referenced in "%{parent_task}" in project "%{project}"],
+      child_task: txn.child_task.name,
+      parent_task: txn.parent_task.name,
+      project: txn.parent_task.project.name
+    ) %>

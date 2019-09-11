@@ -1,0 +1,5 @@
+<p>
+  <%= gettext("Project: %{project}", project: txn.update_task.project.name) %>
+  <br />
+  <%= gettext("Task: %{task}", task: txn.update_task.name) %>
+</p>

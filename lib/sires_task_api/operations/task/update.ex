@@ -16,7 +16,7 @@ defmodule SiresTaskApi.Task.Update do
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
   import Task.SharedHelpers
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:task, schema: Task, preloads: [:project, :tags, attachments: :versions])
     |> authorize(:task, policy: TaskPolicy, action: :update)

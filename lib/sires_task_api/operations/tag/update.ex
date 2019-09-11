@@ -2,7 +2,7 @@ defmodule SiresTaskApi.Tag.Update do
   use SiresTaskApi.Operation, params: %{id!: :integer, tag!: %{name!: :string}}
   alias SiresTaskApi.{Repo, Tag, TagPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:tag, schema: Tag)
     |> authorize(:tag, policy: TagPolicy, action: :update)

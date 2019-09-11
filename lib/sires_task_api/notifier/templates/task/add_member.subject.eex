@@ -1,0 +1,6 @@
+<%= gettext(
+      ~s[%{user} added to "%{task}" in project "%{project}"],
+      user: SiresTaskApi.User.full_name(txn.user),
+      task: txn.task.name,
+      project: txn.task.project.name
+    ) %>

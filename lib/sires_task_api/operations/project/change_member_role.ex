@@ -4,7 +4,7 @@ defmodule SiresTaskApi.Project.ChangeMemberRole do
 
   alias SiresTaskApi.{Repo, Project, ProjectPolicy}
 
-  def call(op) do
+  def build(op) do
     op
     |> find(:project, schema: Project, id_path: [:project_id])
     |> authorize(:project, policy: ProjectPolicy, action: :update)

@@ -1,0 +1,11 @@
+<%= if txn.update_task.done do %>
+<%= gettext(
+      ~s[Task "%{task}" in project "%{project}" completed],
+      task: txn.update_task.name,
+      project: txn.update_task.project.name) %>
+<% else %>
+<%= gettext(
+      ~s[Task "%{task}" in project "%{project}" put back to work],
+      task: txn.update_task.name,
+      project: txn.update_task.project.name) %>
+<% end %>
