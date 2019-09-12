@@ -25,10 +25,10 @@ pre_erlang_get_and_update_deps() {
       [ -f ~/.profile ] && source ~/.profile
       mkdir -p '$BUILD_AT'
        ln -sfn '$_prod_secret_path' '$BUILD_AT/config/prod.secret.exs'
-       cd '$BUILD_AT'
-      APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD ecto.migrate $SILENCE
-      APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD deps.get $SILENCE
-      APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD phx.digest $SILENCE
+      # cd '$BUILD_AT'
+      #APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD ecto.migrate $SILENCE
+      #APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD deps.get $SILENCE
+      #APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD phx.digest $SILENCE
    "
   fi
 }
