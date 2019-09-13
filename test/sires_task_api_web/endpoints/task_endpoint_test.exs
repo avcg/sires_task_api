@@ -84,6 +84,19 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       insert!(:project_member, project: project, user: ctx.user, role: "guest")
       ctx.conn |> assert_index("tags[]=#{tag.name}", task, other_task)
     end
+
+    test "list tasks as admin", ctx do
+      admin = insert!(:admin)
+      task = insert!(:task)
+      other_task = insert!(:task)
+
+      response = ctx.conn |> sign_as(admin) |> get("/api/v1/tasks") |> json_response(200)
+
+      ids = response["tasks"] |> Enum.map(& &1["id"])
+      assert task.id in ids
+      assert other_task.id in ids
+      assert response["total_count"] == 2
+    end
   end
 
   describe "GET /api/v1/tasks/calendar" do
