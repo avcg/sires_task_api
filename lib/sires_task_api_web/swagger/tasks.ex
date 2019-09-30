@@ -1,7 +1,7 @@
 defmodule SiresTaskApiWeb.Swagger.Tasks do
   use PhoenixSwagger
 
-  @task_member_roles ~w(assignor responsible co-responsible observer)
+  @task_member_roles ~w(assignator responsible co-responsible observer)
   @reference_types ~w(subtask blocker)
 
   def swagger_definitions do
@@ -158,7 +158,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     put("/tasks/{id}")
     tag("Tasks")
     summary("Update a task")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       body(
@@ -187,7 +187,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     summary("Mark a task done")
 
     description("""
-    Availabe only for task responsibles, co-responsibles, assignors, project admins and global admins.
+    Availabe only for task responsibles, co-responsibles, assignators, project admins and global admins.
     """)
 
     parameters do
@@ -206,7 +206,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     summary("Mark a task undone")
 
     description("""
-    Availabe only for task responsibles, co-responsibles, assignors, project admins and global admins.
+    Availabe only for task responsibles, co-responsibles, assignators, project admins and global admins.
     """)
 
     parameters do
@@ -223,7 +223,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     delete("/tasks/{id}")
     tag("Tasks")
     summary("Delete task")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       id(:path, :string, "Task id", required: true)
@@ -239,7 +239,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     post("/tasks/{task_id}/members")
     tag("Tasks")
     summary("Add member to task")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       task_id(:path, :integer, "Task id", required: true)
@@ -268,7 +268,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     delete("/tasks/{task_id}/members/{id}")
     tag("Tasks")
     summary("Remove member from task")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       task_id(:path, :integer, "Task id", required: true)
@@ -287,7 +287,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     post("/tasks/{task_id}/references")
     tag("Tasks")
     summary("Reference a task to another task")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       task_id(:path, :integer, "Parent task id", required: true)
@@ -316,7 +316,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     delete("/tasks/{task_id}/references/{id}")
     tag("Tasks")
     summary("Remove references to a task from another task")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       task_id(:path, :integer, "Parent task id", required: true)
@@ -427,7 +427,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     post("/tasks/{task_id}/attachments/{attachment_id}/versions")
     tag("Tasks")
     summary("Add task attachment version")
-    description("Available only for task assignors, project admins and global admins.")
+    description("Available only for task assignators, project admins and global admins.")
 
     parameters do
       task_id(:path, :integer, "Task id", required: true)

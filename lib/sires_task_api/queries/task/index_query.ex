@@ -7,7 +7,7 @@ defmodule SiresTaskApi.Task.IndexQuery do
   @keyword_fragment "#{@ts_vector} @@ #{@ts_query}"
   @keyword_order_fragment "TS_RANK_CD(#{@ts_vector}, #{@ts_query})"
 
-  @task_member_roles ~w(assignor responsible co-responsible observer)
+  @task_member_roles ~w(assignator responsible co-responsible observer)
 
   def build_query(%User{id: user_id} = user, dynamic, opts) do
     Task
