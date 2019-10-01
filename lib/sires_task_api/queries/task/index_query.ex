@@ -12,7 +12,7 @@ defmodule SiresTaskApi.Task.IndexQuery do
   def build_query(%User{id: user_id} = user, dynamic, opts) do
     Task
     |> Bodyguard.scope(user)
-    |> join(:left, [t], tm in assoc(t, :members), as: :tag_members)
+    |> join(:left, [t], tm in assoc(t, :members), as: :task_members)
     |> join(:left, [t], tg in assoc(t, :tags), as: :tags)
     |> where([tag_members: tm], is_nil(tm.user_id) or tm.user_id == ^user_id)
     |> where(^dynamic)
