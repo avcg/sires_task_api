@@ -14,7 +14,7 @@ defmodule SiresTaskApi.Task.IndexQuery do
     |> Bodyguard.scope(user)
     |> join(:left, [t], tm in assoc(t, :members), as: :task_members)
     |> join(:left, [t], tg in assoc(t, :tags), as: :tags)
-    |> where([tag_members: tm], is_nil(tm.user_id) or tm.user_id == ^user_id)
+    |> where([task_members: tm], is_nil(tm.user_id) or tm.user_id == ^user_id)
     |> where(^dynamic)
     |> add_order(opts[:params])
     |> distinct([t], t.id)
@@ -49,11 +49,11 @@ defmodule SiresTaskApi.Task.IndexQuery do
   end
 
   defp filter(dynamic, "role", role, _) when role in @task_member_roles do
-    {:ok, dynamic([_t, _p, _pm, tm], ^dynamic and tm.role == ^role)}
+    {:ok, dynamic([task_members: tm], ^dynamic and tm.role == ^role)}
   end
 
   defp filter(dynamic, "tags", tags, _) when is_list(tags) do
-    {:ok, dynamic([_t, _p, _pm, _tm, tg], ^dynamic and tg.name in ^tags)}
+    {:ok, dynamic([tags: tg], ^dynamic and tg.name in ^tags)}
   end
 
   defp filter(dynamic, _, _, _) do
