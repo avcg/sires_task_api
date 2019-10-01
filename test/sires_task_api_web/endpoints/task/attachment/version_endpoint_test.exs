@@ -68,9 +68,9 @@ defmodule SiresTaskApiWeb.Task.Attachment.VersionEndpointTest do
   end
 
   describe "POST /api/v1/tasks/:task_id/attachments/:attachment_id/versions" do
-    test "add attachment version as task assignor", ctx do
+    test "add attachment version as task assignator", ctx do
       insert!(:project_member, project: ctx.task.project, user: ctx.user)
-      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignor")
+      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignator")
 
       upload = build(:upload)
       params = %{version: %{file: upload}}

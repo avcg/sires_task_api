@@ -2,13 +2,13 @@ defmodule SiresTaskApiWeb.Task.MemberEndpointTest do
   use SiresTaskApiWeb.ConnCase, async: true
 
   describe "POST /api/v1/tasks/:task_id/members" do
-    test "add member to task as task assignor", ctx do
+    test "add member to task as task assignator", ctx do
       user = insert!(:user)
       other_user = insert!(:user)
       task = insert!(:task)
       insert!(:project_member, project: task.project, user: user)
       insert!(:project_member, project: task.project, user: other_user)
-      insert!(:task_member, task: task, user: user, role: "assignor")
+      insert!(:task_member, task: task, user: user, role: "assignator")
       params = %{user_id: other_user.id, role: "responsible"}
 
       response =
@@ -75,8 +75,8 @@ defmodule SiresTaskApiWeb.Task.MemberEndpointTest do
       task = insert!(:task)
       insert!(:project_member, project: task.project, user: user, role: "admin")
       insert!(:project_member, project: task.project, user: other_user)
-      insert!(:task_member, task: task, user: other_user, role: "assignor")
-      params = %{user_id: other_user.id, role: "assignor"}
+      insert!(:task_member, task: task, user: other_user, role: "assignator")
+      params = %{user_id: other_user.id, role: "assignator"}
 
       ctx.conn
       |> sign_as(user)
@@ -162,13 +162,13 @@ defmodule SiresTaskApiWeb.Task.MemberEndpointTest do
       |> refute()
     end
 
-    test "remove member role as task assignor", ctx do
+    test "remove member role as task assignator", ctx do
       user = insert!(:user)
       other_user = insert!(:user)
       task = insert!(:task)
       insert!(:project_member, project: task.project, user: user)
       insert!(:project_member, project: task.project, user: other_user)
-      insert!(:task_member, task: task, user: user, role: "assignor")
+      insert!(:task_member, task: task, user: user, role: "assignator")
       insert!(:task_member, task: task, user: other_user, role: "responsible")
 
       ctx.conn

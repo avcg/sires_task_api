@@ -283,6 +283,40 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(422, "Unprocessable Entity")
   end
 
+  swagger_path :update_members_role do
+    put("/tasks/{task_id}/members/roles/{role}")
+    tag("Tasks")
+    summary("Set members for specific role in the task")
+
+    description("""
+    Available only for task assignators, project admins and global admins.
+    Removes previous members for the specified role.
+    """)
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+      role(:path, :string, "Role", required: true, enum: @task_member_roles)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            user_ids(:array, "User ids", items: :integer, required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(200, "OK")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
   swagger_path :add_reference do
     post("/tasks/{task_id}/references")
     tag("Tasks")
