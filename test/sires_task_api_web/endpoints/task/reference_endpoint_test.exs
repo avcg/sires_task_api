@@ -23,9 +23,9 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
       assert response["reference"]["task"]["id"] == other_task.id
     end
 
-    test "add reference to task as task assignor", ctx do
+    test "add reference to task as task assignator", ctx do
       insert!(:project_member, project: ctx.task.project, user: ctx.user)
-      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignor")
+      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignator")
       ctx.conn |> add_reference(ctx.task, ctx.other_task)
     end
 
@@ -120,9 +120,9 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
       {:ok, user: user, conn: conn |> sign_as(user), reference: reference}
     end
 
-    test "remove task reference as task assignor", ctx do
+    test "remove task reference as task assignator", ctx do
       insert!(:project_member, project: ctx.reference.parent_task.project, user: ctx.user)
-      insert!(:task_member, task: ctx.reference.parent_task, user: ctx.user, role: "assignor")
+      insert!(:task_member, task: ctx.reference.parent_task, user: ctx.user, role: "assignator")
       %{parent_task_id: parent_id, child_task_id: child_id} = ctx.reference
 
       ctx.conn
@@ -171,7 +171,7 @@ defmodule SiresTaskApiWeb.Task.ReferenceEndpointTest do
 
     test "fail to remove missing task reference", ctx do
       insert!(:project_member, project: ctx.reference.parent_task.project, user: ctx.user)
-      insert!(:task_member, task: ctx.reference.parent_task, user: ctx.user, role: "assignor")
+      insert!(:task_member, task: ctx.reference.parent_task, user: ctx.user, role: "assignator")
       other_task = insert!(:task)
 
       ctx.conn

@@ -28,7 +28,7 @@ defmodule SiresTaskApi.Task.Create do
     %Task{project: project, creator: creator, editor: creator}
     |> changeset(params, tags)
     |> Ecto.Changeset.validate_required([:name])
-    |> Ecto.Changeset.put_assoc(:members, [%Task.Member{user: creator, role: "assignor"}])
+    |> Ecto.Changeset.put_assoc(:members, [%Task.Member{user: creator, role: "assignator"}])
     |> Repo.insert()
   end
 end

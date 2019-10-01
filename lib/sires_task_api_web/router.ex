@@ -60,6 +60,7 @@ defmodule SiresTaskApiWeb.Router do
 
       resources "/members", Task.MemberController, only: [:create, :delete]
       options "/members", Task.MemberController, :options
+      put "/members/roles/:role", Task.Member.RoleController, :update
 
       resources "/references", Task.ReferenceController, only: [:create, :delete]
       options "/references", Task.ReferenceController, :options

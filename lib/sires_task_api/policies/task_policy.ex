@@ -15,12 +15,12 @@ defmodule SiresTaskApi.TaskPolicy do
   end
 
   def authorize(action, user, task) when action in [:update, :delete] do
-    member?(user, task, ~w(assignor)) ||
+    member?(user, task, ~w(assignator)) ||
       ProjectPolicy.member?(user, task.project, ~w(admin))
   end
 
   def authorize(:toggle_done, user, task) do
-    member?(user, task, ~w(assignor responsible co-responsible)) ||
+    member?(user, task, ~w(assignator responsible co-responsible)) ||
       ProjectPolicy.member?(user, task.project, ~w(admin))
   end
 

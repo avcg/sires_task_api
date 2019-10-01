@@ -231,7 +231,7 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       user = insert!(:user)
       task = insert!(:task, tags: [build(:tag)])
       insert!(:project_member, user: user, project: task.project)
-      insert!(:task_member, user: user, task: task, role: "assignor")
+      insert!(:task_member, user: user, task: task, role: "assignator")
       tag = insert!(:tag)
       upload = build(:upload)
 
@@ -295,7 +295,7 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       user = insert!(:user)
       task = insert!(:task)
       insert!(:project_member, user: user, project: task.project)
-      insert!(:task_member, user: user, task: task, role: "assignor")
+      insert!(:task_member, user: user, task: task, role: "assignator")
 
       ctx.conn
       |> sign_as(user)
@@ -344,11 +344,11 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       ctx.conn |> sign_as(user) |> toggle_done_on_and_off(task)
     end
 
-    test "toggle task done off and on as task assignor", ctx do
+    test "toggle task done off and on as task assignator", ctx do
       task = insert!(:task)
       user = insert!(:user)
       insert!(:project_member, project: task.project, user: user)
-      insert!(:task_member, task: task, user: user, role: "assignor")
+      insert!(:task_member, task: task, user: user, role: "assignator")
       ctx.conn |> sign_as(user) |> toggle_done_on_and_off(task)
     end
 
@@ -391,9 +391,9 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       {:ok, user: user, conn: conn |> sign_as(user), task: insert!(:task)}
     end
 
-    test "delete task as task assignor", ctx do
+    test "delete task as task assignator", ctx do
       insert!(:project_member, project: ctx.task.project, user: ctx.user)
-      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignor")
+      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignator")
 
       ctx.conn |> delete("/api/v1/tasks/#{ctx.task.id}") |> json_response(200)
       ctx.conn |> get("/api/v1/tasks/#{ctx.task.id}") |> json_response(404)

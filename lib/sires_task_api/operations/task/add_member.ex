@@ -24,7 +24,10 @@ defmodule SiresTaskApi.Task.AddMember do
   defp add_member(task, user, role) do
     %Task.Member{task: task, user: user}
     |> Ecto.Changeset.change(%{role: role})
-    |> Ecto.Changeset.validate_inclusion(:role, ~w(assignor responsible co-responsible observer))
+    |> Ecto.Changeset.validate_inclusion(
+      :role,
+      ~w(assignator responsible co-responsible observer)
+    )
     |> Ecto.Changeset.unique_constraint(:role, name: :task_members_pkey)
     |> Repo.insert()
   end

@@ -80,3 +80,5 @@ config :sires_task_api, SiresTaskApi.Repo,
   database: "sires_task_api_prod",
   hostname: "localhost",
   pool_size: 10
+
+import_config "prod.secret.exs"
