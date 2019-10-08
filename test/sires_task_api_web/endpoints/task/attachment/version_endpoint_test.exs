@@ -155,4 +155,61 @@ defmodule SiresTaskApiWeb.Task.Attachment.VersionEndpointTest do
       |> json_response(404)
     end
   end
+
+  describe "DELETE /api/v1/tasks/:task_id/attachments/:attachment_id/versions/:id" do
+    setup ctx do
+      version = ctx.attachment.versions |> List.first()
+      url = "/api/v1/tasks/#{ctx.task.id}/attachments/#{ctx.attachment.id}/versions/#{version.id}"
+      {:ok, ctx |> Map.merge(%{version: version, url: url})}
+    end
+
+    test "delete attachment version as task assignator", ctx do
+      insert!(:project_member, project: ctx.task.project, user: ctx.user)
+      insert!(:task_member, task: ctx.task, user: ctx.user, role: "assignator")
+      ctx.conn |> delete(ctx.url) |> json_response(200)
+
+      # We have deleted the only version so the whole attachment should be deleted.
+      ctx.conn
+      |> get("/api/v1/tasks/#{ctx.task.id}/attachments/#{ctx.attachment.id}/versions")
+      |> json_response(404)
+    end
+
+    test "delete attachment version as project admin", ctx do
+      _other_version = insert!(:task_attachment_version, attachment_id: ctx.attachment.id)
+
+      insert!(:project_member, project: ctx.task.project, user: ctx.user, role: "admin")
+      ctx.conn |> delete(ctx.url) |> json_response(200)
+
+      # Another version is still present so the attachment should not be deleted.
+      ctx.conn
+      |> get("/api/v1/tasks/#{ctx.task.id}/attachments/#{ctx.attachment.id}/versions")
+      |> json_response(200)
+    end
+
+    test "delete attachment version as global admin", ctx do
+      admin = insert!(:admin)
+      ctx.conn |> sign_as(admin) |> delete(ctx.url) |> json_response(200)
+    end
+
+    test "fail to delete attachment version without permission", ctx do
+      ctx.conn |> delete(ctx.url) |> json_response(403)
+    end
+
+    test "fail to delete attachment version from missing task", ctx do
+      url = "/api/v1/tasks/0123/attachments/#{ctx.attachment.id}/versions/#{ctx.version.id}"
+      ctx.conn |> delete(url) |> json_response(404)
+    end
+
+    test "fail to delete attachment version from missing attachment", ctx do
+      insert!(:project_member, project: ctx.task.project, user: ctx.user, role: "admin")
+      url = "/api/v1/tasks/#{ctx.task.id}/attachments/0123/versions/#{ctx.version.id}"
+      ctx.conn |> delete(url) |> json_response(404)
+    end
+
+    test "fail to delete missing attachment version", ctx do
+      insert!(:project_member, project: ctx.task.project, user: ctx.user, role: "admin")
+      url = "/api/v1/tasks/#{ctx.task.id}/attachments/#{ctx.attachment.id}/versions/0123"
+      ctx.conn |> delete(url) |> json_response(404)
+    end
+  end
 end
