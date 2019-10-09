@@ -1,5 +1,7 @@
 defmodule SiresTaskApiWeb.Router do
   use SiresTaskApiWeb, :router
+  use Plug.ErrorHandler
+  use Sentry.Plug
 
   pipeline :api do
     plug CORSPlug, origin: "*"

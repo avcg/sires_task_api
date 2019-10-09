@@ -46,7 +46,7 @@ defmodule SiresTaskApi.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
+      {:jason, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
@@ -59,7 +59,10 @@ defmodule SiresTaskApi.MixProject do
       {:edeliver, ">= 1.7.0"},
       {:distillery, "~> 2.1.0", warn_missing: false},
       {:cors_plug, "~> 1.5"},
-      {:bamboo, "~> 1.3"}
+      {:bamboo, "~> 1.3"},
+      {:sentry, "~> 7.1"},
+      # https://github.com/benoitc/hackney/issues/591
+      {:hackney, github: "benoitc/hackney", tag: "1.15.2", override: true}
     ]
   end
 
