@@ -39,4 +39,10 @@ defmodule SiresTaskApiWeb.Task.Attachment.VersionController do
       conn |> put_status(:created) |> render(:show, version: version)
     end
   end
+
+  def delete(conn, params) do
+    with {:ok, _} <- Task.DeleteAttachmentVersion |> run(conn, params) do
+      conn |> json(%{result: "ok"})
+    end
+  end
 end

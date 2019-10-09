@@ -457,7 +457,7 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(404, "Not Found")
   end
 
-  swagger_path :add_attachment_versions do
+  swagger_path :add_attachment_version do
     post("/tasks/{task_id}/attachments/{attachment_id}/versions")
     tag("Tasks")
     summary("Add task attachment version")
@@ -481,6 +481,25 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
 
     response(201, "Created")
     response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
+  swagger_path :delete_attachment_version do
+    delete("/tasks/{task_id}/attachments/{attachment_id}/versions/{id}")
+    tag("Tasks")
+    summary("Delete task attachment version")
+    description("Available only for task assignators, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+      attachment_id(:path, :integer, "Attachment id", required: true)
+      id(:path, :integer, "Attachment version id", required: true)
+    end
+
+    response(200, "OK")
     response(401, "Unauthorized")
     response(403, "Forbidden")
     response(404, "Not Found")

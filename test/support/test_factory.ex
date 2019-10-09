@@ -72,9 +72,15 @@ defmodule SiresTaskApi.TestFactory do
     %SiresTaskApi.Task.Attachment{
       versions: [
         %SiresTaskApi.Task.Attachment.Version{
-          file: %{file_name: "test.txt", updated_at: DateTime.utc_now()}
+          file: %{file_name: "test#{sequence()}.txt", updated_at: DateTime.utc_now()}
         }
       ]
+    }
+  end
+
+  def build(:task_attachment_version) do
+    %SiresTaskApi.Task.Attachment.Version{
+      file: %{file_name: "test#{sequence()}.txt", updated_at: DateTime.utc_now()}
     }
   end
 
@@ -95,17 +101,21 @@ defmodule SiresTaskApi.TestFactory do
   end
 
   def build(:upload) do
+    n = sequence()
+
     %Plug.Upload{
-      path: "test/files/test.txt",
-      filename: "test.txt",
+      path: "test/files/test#{n}.txt",
+      filename: "test#{n}.txt",
       content_type: "application/octet-stream"
     }
   end
 
   def build(:avatar_upload) do
+    n = sequence()
+
     %Plug.Upload{
-      path: "test/files/avatar.jpg",
-      filename: "avatar.jpg",
+      path: "test/files/avatar#{n}.jpg",
+      filename: "avatar#{n}.jpg",
       content_type: "image/jpeg"
     }
   end

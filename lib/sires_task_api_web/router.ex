@@ -71,7 +71,7 @@ defmodule SiresTaskApiWeb.Router do
       options "/comments", Task.CommentController, :options
 
       resources "/attachments", Task.AttachmentController, only: [] do
-        resources "/versions", Task.Attachment.VersionController, only: [:index, :create]
+        resources "/versions", Task.Attachment.VersionController, only: [:index, :create, :delete]
         options "/versions", Task.Attachment.VersionController, :options
       end
 
