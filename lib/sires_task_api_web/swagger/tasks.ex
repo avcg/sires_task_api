@@ -95,6 +95,12 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
       hot(:query, :boolean, "Filter tasks with finish time in the last 7 days")
       role(:query, :string, "Filter by current user's role in the task", enum: @task_member_roles)
       tags(:query, :array, "Filter by tags", items: :string)
+
+      top_level(
+        :query,
+        :boolean,
+        "Filter tasks without parents when true and only subtasks when false"
+      )
     end
 
     response(200, "OK")

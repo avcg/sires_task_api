@@ -6,7 +6,7 @@ defmodule SiresTaskApiWeb.TaskView do
   @fields ~w(id name description start_time finish_time done inserted_at updated_at)a
 
   def render("index.json", %{tasks: tasks, pagination: pagination}) do
-    %{tasks: Enum.map(tasks, &task/1), total_count: pagination.total_count}
+    %{tasks: Enum.map(tasks, &task(&1, :extended)), total_count: pagination.total_count}
   end
 
   def render("calendar.json", %{tasks: tasks}) do
@@ -21,6 +21,12 @@ defmodule SiresTaskApiWeb.TaskView do
 
   def task(task, :short) do
     task |> Map.take(@fields)
+  end
+
+  def task(task, :extended) do
+    task
+    |> task(:short)
+    |> Map.put(:parent_references, Enum.map(task.parent_references, &parent_reference/1))
   end
 
   def task(task, :full) do

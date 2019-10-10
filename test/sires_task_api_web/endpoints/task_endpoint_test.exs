@@ -85,6 +85,18 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       ctx.conn |> assert_index("tags[]=#{tag.name}", task, other_task)
     end
 
+    test "filter only top level tasks", ctx do
+      ref = insert!(:task_reference)
+      insert!(:project_member, project: ref.parent_task.project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("top_level=true", ref.parent_task, ref.child_task)
+    end
+
+    test "filter only subtasks", ctx do
+      ref = insert!(:task_reference)
+      insert!(:project_member, project: ref.child_task.project, user: ctx.user, role: "guest")
+      ctx.conn |> assert_index("top_level=false", ref.child_task, ref.parent_task)
+    end
+
     test "list tasks as admin", ctx do
       admin = insert!(:admin)
       task = insert!(:task)
