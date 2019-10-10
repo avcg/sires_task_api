@@ -463,6 +463,35 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     response(404, "Not Found")
   end
 
+  swagger_path :add_attachment do
+    post("/tasks/{task_id}/attachments")
+    tag("Tasks")
+    summary("Add task attachment")
+    description("Available only for task assignators, project admins and global admins.")
+
+    parameters do
+      task_id(:path, :integer, "Task id", required: true)
+
+      body(
+        :body,
+        Schema.new do
+          properties do
+            member(Schema.ref(:TaskAttachment), "Attachment properties", required: true)
+          end
+        end,
+        "Body",
+        required: true
+      )
+    end
+
+    response(201, "Created")
+    response(400, "Bad Request")
+    response(401, "Unauthorized")
+    response(403, "Forbidden")
+    response(404, "Not Found")
+    response(422, "Unprocessable Entity")
+  end
+
   swagger_path :add_attachment_version do
     post("/tasks/{task_id}/attachments/{attachment_id}/versions")
     tag("Tasks")
@@ -497,7 +526,11 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     delete("/tasks/{task_id}/attachments/{attachment_id}/versions/{id}")
     tag("Tasks")
     summary("Delete task attachment version")
-    description("Available only for task assignators, project admins and global admins.")
+
+    description("""
+    Available only for task assignators, project admins and global admins.
+    When the only version gets deleted the whole attachment gets deleted as well.
+    """)
 
     parameters do
       task_id(:path, :integer, "Task id", required: true)

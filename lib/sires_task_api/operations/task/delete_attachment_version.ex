@@ -1,9 +1,10 @@
 defmodule SiresTaskApi.Task.DeleteAttachmentVersion do
-  use SiresTaskApi.Operation, params: %{
-    task_id!: :integer,
-    attachment_id!: :integer,
-    id!: :integer
-  }
+  use SiresTaskApi.Operation,
+    params: %{
+      task_id!: :integer,
+      attachment_id!: :integer,
+      id!: :integer
+    }
 
   alias SiresTaskApi.{Repo, Task, TaskPolicy}
   import Task.SharedHelpers

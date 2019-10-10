@@ -27,6 +27,11 @@ config :phoenix, :json_library, Jason
 
 config :ex_operation, repo: SiresTaskApi.Repo
 
+config :sentry,
+  environment_name: Mix.env(),
+  included_environments: [:prod],
+  root_source_code_path: File.cwd!()
+
 config :sires_task_api, SiresTaskApiWeb.Guardian,
   issuer: "sires_task_api",
   secret_key: "lGJvqIfuWT8bLPU9PFJqzPXjkdoA4JJB+pT1YOmr7i+AH8YBWs5AduMuUfTv2pR2"
