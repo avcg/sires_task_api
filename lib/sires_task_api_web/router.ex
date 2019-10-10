@@ -70,7 +70,7 @@ defmodule SiresTaskApiWeb.Router do
       resources "/comments", Task.CommentController, only: [:create, :update, :delete]
       options "/comments", Task.CommentController, :options
 
-      resources "/attachments", Task.AttachmentController, only: [] do
+      resources "/attachments", Task.AttachmentController, only: [:create] do
         resources "/versions", Task.Attachment.VersionController, only: [:index, :create, :delete]
         options "/versions", Task.Attachment.VersionController, :options
       end

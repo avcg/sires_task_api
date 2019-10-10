@@ -101,21 +101,17 @@ defmodule SiresTaskApi.TestFactory do
   end
 
   def build(:upload) do
-    n = sequence()
-
     %Plug.Upload{
-      path: "test/files/test#{n}.txt",
-      filename: "test#{n}.txt",
+      path: "test/files/test.txt",
+      filename: "test.txt",
       content_type: "application/octet-stream"
     }
   end
 
   def build(:avatar_upload) do
-    n = sequence()
-
     %Plug.Upload{
-      path: "test/files/avatar#{n}.jpg",
-      filename: "avatar#{n}.jpg",
+      path: "test/files/avatar.jpg",
+      filename: "avatar.jpg",
       content_type: "image/jpeg"
     }
   end
