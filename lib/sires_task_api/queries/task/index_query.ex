@@ -17,6 +17,7 @@ defmodule SiresTaskApi.Task.IndexQuery do
       as: :task_members
     )
     |> join(:left, [t], tg in assoc(t, :tags), as: :tags)
+    |> join(:left, [t], p in assoc(t, :parent_tasks), as: :parents)
     |> where(^dynamic)
     |> add_order(opts[:params])
     |> distinct([t], t.id)
@@ -56,6 +57,14 @@ defmodule SiresTaskApi.Task.IndexQuery do
 
   defp filter(dynamic, "tags", tags, _) when is_list(tags) do
     {:ok, dynamic([tags: tg], ^dynamic and tg.name in ^tags)}
+  end
+
+  defp filter(dynamic, "top_level", "true", _) do
+    {:ok, dynamic([parents: p], ^dynamic and is_nil(p.id))}
+  end
+
+  defp filter(dynamic, "top_level", "false", _) do
+    {:ok, dynamic([parents: p], ^dynamic and not is_nil(p.id))}
   end
 
   defp filter(dynamic, _, _, _) do
