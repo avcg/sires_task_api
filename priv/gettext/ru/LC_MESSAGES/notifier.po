@@ -7,6 +7,9 @@ msgstr "Задача \"%{task}\" из проекта \"%{project}\" обновл
 msgid "New attachment version \"%{task}\" in project \"%{project}\""
 msgstr "Новая версия вложения в задаче \"%{task}\" в проекте \"%{project}\""
 
+msgid "Attachment version deleted from \"%{task}\" in project \"%{project}\""
+msgstr "Версия вложения в задаче \"%{task}\" в проекте \"%{project}\" удалена"
+
 msgid "%{author} commented on \"%{task}\" in project \"%{project}\""
 msgstr "%{author} добавил комментарий к задаче \"%{task}\" в проекте \"%{project}\""
 
@@ -28,6 +31,45 @@ msgstr "Задача \"%{task}\" в проекте \"%{project}\" заверше
 msgid "Task \"%{task}\" in project \"%{project}\" put back to work"
 msgstr "Задача \"%{task}\" в проекте \"%{project}\" возвращена в работу"
 
+msgid "New project \"%{project}\""
+msgstr "Новый проект \"%{project}\""
+
+msgid "Project \"%{project}\" updated"
+msgstr "Проект \"%{project}\" изменён"
+
+msgid "Project \"%{project}\" deleted"
+msgstr "Проект \"%{project}\" удалён"
+
+msgid "%{user} added to project \"%{project}\""
+msgstr "%{user} добавлен в проект \"%{project}\""
+
+msgid "%{user}'s role changed in \"%{project}\""
+msgstr "Роль пользователя %{user} в проекте \"%{project}\" изменена"
+
+msgid "%{user} removed from project \"%{project}\""
+msgstr "%{user} удалён из проекта \"%{project}\""
+
+msgid "New tag \"%{tag}\""
+msgstr "Новый тег \"%{tag}\""
+
+msgid "Tag \"%{tag}\" updated"
+msgstr "Тег \"%{tag}\" изменён"
+
+msgid "Tag \"%{tag}\" deleted"
+msgstr "Тег \"%{tag}\" удалён"
+
+msgid "New user %{user}"
+msgstr "Новый пользователь %{user}"
+
+msgid "User %{user} updated"
+msgstr "Профиль пользователя %{user} обновлён"
+
+msgid "User %{user} deactivated"
+msgstr "Пользователь %{user} деактивирован"
+
+msgid "User %{user} activated"
+msgstr "Пользователь %{user} активирован"
+
 msgid "Project: %{project}"
 msgstr "Проект: %{project}"
 
@@ -45,3 +87,6 @@ msgstr "Родительская задача: %{task}"
 
 msgid "Child task: %{task}"
 msgstr "Связанная задача: %{task}"
+
+msgid "Tag: %{tag}"
+msgstr "Тег: %{tag}"

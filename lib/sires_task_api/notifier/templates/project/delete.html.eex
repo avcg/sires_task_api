@@ -1,0 +1,3 @@
+<p>
+  <%= gettext("Project: %{project}", project: txn.project.name) %>
+</p>

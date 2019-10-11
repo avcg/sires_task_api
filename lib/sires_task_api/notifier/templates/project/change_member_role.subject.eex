@@ -1,0 +1,5 @@
+<%= gettext(
+      ~s[%{user}'s role changed in "%{project}"],
+      user: SiresTaskApi.User.full_name(txn.user),
+      project: txn.project.name
+    ) %>

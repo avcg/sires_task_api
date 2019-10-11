@@ -1,0 +1,1 @@
+<%= gettext(~s[User %{user} updated], user: SiresTaskApi.User.full_name(txn.user)) %>

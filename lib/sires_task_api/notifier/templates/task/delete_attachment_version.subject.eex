@@ -1,0 +1,5 @@
+<%= gettext(
+      ~s[Attachment version deleted from "%{task}" in project "%{project}"],
+      task: txn.task.name,
+      project: txn.task.project.name
+    ) %>

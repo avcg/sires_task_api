@@ -1,0 +1,4 @@
+<%= gettext(
+      ~s[Project "%{project}" deleted],
+      project: txn.project.name
+    ) %>

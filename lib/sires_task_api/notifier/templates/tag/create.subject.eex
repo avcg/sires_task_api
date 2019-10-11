@@ -1,0 +1,1 @@
+<%= gettext(~s[New tag "%{tag}"], tag: txn.create_tag.name) %>

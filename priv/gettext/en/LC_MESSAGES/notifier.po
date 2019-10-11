@@ -7,6 +7,9 @@ msgstr ""
 msgid "New attachment version \"%{task}\" in project \"%{project}\""
 msgstr ""
 
+msgid "Attachment version deleted from \"%{task}\" in project \"%{project}\""
+msgstr ""
+
 msgid "%{author} commented on \"%{task}\" in project \"%{project}\""
 msgstr ""
 
@@ -28,6 +31,45 @@ msgstr ""
 msgid "Task \"%{task}\" in project \"%{project}\" put back to work"
 msgstr ""
 
+msgid "New project \"%{project}\""
+msgstr ""
+
+msgid "Project \"%{project}\" updated"
+msgstr ""
+
+msgid "Project \"%{project}\" deleted"
+msgstr ""
+
+msgid "%{user} added to project \"%{project}\""
+msgstr ""
+
+msgid "%{user}'s role changed in \"%{project}\""
+msgstr ""
+
+msgid "%{user} removed from project \"%{project}\""
+msgstr ""
+
+msgid "New tag \"%{tag}\""
+msgstr ""
+
+msgid "Tag \"%{tag}\" updated"
+msgstr ""
+
+msgid "Tag \"%{tag}\" deleted"
+msgstr ""
+
+msgid "New user %{user}"
+msgstr ""
+
+msgid "User %{user} updated"
+msgstr ""
+
+msgid "User %{user} deactivated"
+msgstr ""
+
+msgid "User %{user} activated"
+msgstr ""
+
 msgid "Project: %{project}"
 msgstr ""
 
@@ -44,4 +86,7 @@ msgid "Parent task: %{task}"
 msgstr ""
 
 msgid "Child task: %{task}"
+msgstr ""
+
+msgid "Tag: %{tag}"
 msgstr ""
