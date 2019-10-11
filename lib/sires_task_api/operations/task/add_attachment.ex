@@ -28,6 +28,6 @@ defmodule SiresTaskApi.Task.AddAttachment do
   end
 
   defp preload_attachment(attachment) do
-    {:ok, attachment |> Repo.preload([versions: :attachment])}
+    {:ok, attachment |> Repo.preload(versions: :attachment)}
   end
 end

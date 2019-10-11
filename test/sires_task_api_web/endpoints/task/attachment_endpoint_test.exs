@@ -32,7 +32,7 @@ defmodule SiresTaskApiWeb.Task.AttachmentEndpointTest do
         |> post("/api/v1/tasks/#{ctx.task.id}/attachments", %{attachment: %{file: upload}})
         |> json_response(201)
 
-        url = response["attachment"]["last_version"]["url"]
+      url = response["attachment"]["last_version"]["url"]
       assert File.read!("." <> url) == File.read!(upload.path)
     end
 
@@ -46,7 +46,7 @@ defmodule SiresTaskApiWeb.Task.AttachmentEndpointTest do
         |> post("/api/v1/tasks/#{ctx.task.id}/attachments", %{attachment: %{file: upload}})
         |> json_response(201)
 
-        url = response["attachment"]["last_version"]["url"]
+      url = response["attachment"]["last_version"]["url"]
       assert File.read!("." <> url) == File.read!(upload.path)
     end
 

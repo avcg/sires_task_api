@@ -62,6 +62,11 @@ defmodule SiresTaskApiWeb do
     quote do
       use Phoenix.Channel
       import SiresTaskApi.Gettext
+
+      def subscribe_to_operation(mod) do
+        SiresTaskApi.DomainPubSub
+        |> Phoenix.PubSub.subscribe("operation:#{SiresTaskApi.Operation.dump(mod)}")
+      end
     end
   end
 

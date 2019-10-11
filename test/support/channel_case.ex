@@ -23,6 +23,14 @@ defmodule SiresTaskApiWeb.ChannelCase do
 
       # The default endpoint for testing
       @endpoint SiresTaskApiWeb.Endpoint
+
+      def dispatch(op, txn) do
+        Phoenix.PubSub.broadcast(
+          SiresTaskApi.DomainPubSub,
+          "operation:#{SiresTaskApi.Operation.dump(op)}",
+          {:operation, op, txn}
+        )
+      end
     end
   end
 
