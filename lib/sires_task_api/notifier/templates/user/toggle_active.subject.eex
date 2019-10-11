@@ -1,0 +1,5 @@
+<%= if txn.update_user.active do
+      gettext(~s[User %{user} activated], user: SiresTaskApi.User.full_name(txn.user))
+    else
+      gettext(~s[User %{user} deactivated], user: SiresTaskApi.User.full_name(txn.user)) 
+    end %>

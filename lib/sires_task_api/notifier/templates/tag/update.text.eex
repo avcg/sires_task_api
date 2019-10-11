@@ -1,0 +1,1 @@
+<%= gettext("Tag: %{tag}", tag: txn.update_tag.name) %>

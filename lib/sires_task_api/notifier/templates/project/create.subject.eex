@@ -1,0 +1,1 @@
+<%= gettext(~s[New project "%{project}"], project: txn.create_project.name) %>

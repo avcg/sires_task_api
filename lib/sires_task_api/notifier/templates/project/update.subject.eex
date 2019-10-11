@@ -1,0 +1,3 @@
+<%= gettext(
+      ~s[Project "%{project}" updated],
+      project: txn.project.name) %>

@@ -1,0 +1,3 @@
+<p>
+  <%= gettext("User: %{user}", user: SiresTaskApi.User.full_name(txn.update_user)) %>
+</p>

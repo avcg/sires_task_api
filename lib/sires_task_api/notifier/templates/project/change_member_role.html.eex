@@ -1,0 +1,5 @@
+<p>
+  <%= gettext("Project: %{project}", project: txn.project.name) %>
+  <br />
+  <%= gettext("User: %{user}", user: SiresTaskApi.User.full_name(txn.user)) %>
+</p>

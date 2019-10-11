@@ -1,0 +1,1 @@
+<%= gettext(~s[New user %{user}], user: SiresTaskApi.User.full_name(txn.create_user)) %>
