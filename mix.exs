@@ -60,6 +60,7 @@ defmodule SiresTaskApi.MixProject do
       {:distillery, "~> 2.1.0", warn_missing: false},
       {:cors_plug, "~> 1.5"},
       {:bamboo, "~> 1.3"},
+      {:bamboo_smtp, "~> 2.0"},
       {:sentry, "~> 7.1"},
       # https://github.com/benoitc/hackney/issues/591
       {:hackney, github: "benoitc/hackney", tag: "1.15.2", override: true}
