@@ -3,8 +3,10 @@ defmodule SiresTaskApiWeb.Task.ReferenceView do
   alias SiresTaskApiWeb.TaskView
 
   def render("show.json", %{reference: reference}) do
-    %{reference: reference(reference, :child_task)}
+    %{reference: reference(reference)}
   end
+
+  def reference(reference), do: reference(reference, :child_task)
 
   def reference(reference, key) do
     reference
