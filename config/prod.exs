@@ -11,7 +11,8 @@ use Mix.Config
 # before starting your production server.
 config :sires_task_api, SiresTaskApiWeb.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "91.134.24.233", port: 4000],
+  url: [host: "api.avcg.ru", port: 443],
+  check_origin: ["//*.avcg.ru"],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   code_reloader: false,
