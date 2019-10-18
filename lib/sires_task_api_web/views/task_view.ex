@@ -10,7 +10,7 @@ defmodule SiresTaskApiWeb.TaskView do
   end
 
   def render("calendar.json", %{tasks: tasks}) do
-    %{calendar: tasks |> Stream.map(&task(&1)) |> Enum.group_by(& &1.finish_time.day)}
+    %{calendar: tasks |> Stream.map(&task(&1, :extended)) |> Enum.group_by(& &1.finish_time.day)}
   end
 
   def render("show.json", %{task: task}) do
@@ -27,6 +27,7 @@ defmodule SiresTaskApiWeb.TaskView do
     task
     |> task(:short)
     |> Map.put(:parent_references, Enum.map(task.parent_references, &parent_reference/1))
+    |> Map.put(:members, Enum.map(task.members, &MemberView.member/1))
   end
 
   def task(task, :full) do

@@ -9,5 +9,6 @@ defmodule SiresTaskApi.Task.CalendarQuery do
     |> where(^dynamic)
     |> where([t], fragment(@month_fragment, t.finish_time, ^year, t.finish_time, ^month))
     |> order_by([t], t.finish_time)
+    |> preload([t], parent_references: :child_task, members: :user)
   end
 end

@@ -19,6 +19,7 @@ defmodule SiresTaskApi.Task.DeleteAttachmentVersion do
     |> step(:ensure_attachment_id, &ensure_attachment_id(&1.version, op.params.attachment_id))
     |> step(:delete_version, &delete_version(&1.version))
     |> step(:delete_empty_attachment, &delete_empty_attachment(&1.attachment))
+    |> step(:new_attachment, &Repo.preload(&1.attachment, [versions: :attachment], force: true))
   end
 
   defp ensure_attachment_id(%{attachment_id: attachment_id}, attachment_id), do: {:ok, true}

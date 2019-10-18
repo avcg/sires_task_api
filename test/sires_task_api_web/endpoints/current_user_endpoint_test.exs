@@ -17,7 +17,9 @@ defmodule SiresTaskApiWeb.CurrentUserEndpointTest do
         |> get("/api/v1/current_user")
         |> json_response(200)
 
-      assert %{"user" => %{"id" => _, "email" => "some@email.com"}, "ws_token" => token} = response
+      assert %{"user" => %{"id" => _, "email" => "some@email.com"}, "ws_token" => token} =
+               response
+
       assert {:ok, user_id} = Phoenix.Token.verify(Endpoint, "user", token, max_age: @token_age)
       assert user_id == ctx.user.id
     end

@@ -21,7 +21,7 @@ defmodule SiresTaskApi.Task.IndexQuery do
     |> where(^dynamic)
     |> add_order(opts[:params])
     |> distinct([t], t.id)
-    |> preload([t], parent_references: :child_task)
+    |> preload([t], parent_references: :child_task, members: :user)
   end
 
   defp filter(dynamic, "search", value, _) do

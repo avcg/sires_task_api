@@ -6,7 +6,7 @@ defmodule SiresTaskApiWeb.Task.AttachmentView do
     %{attachment: attachment(attachment)}
   end
 
-  def attachment(%{id: id, versions: [version]}) do
+  def attachment(%{id: id, versions: [version | _]}) do
     %{id: id, last_version: VersionView.version(version)}
   end
 end
