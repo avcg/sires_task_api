@@ -59,44 +59,50 @@ defmodule SiresTaskApiWeb.TaskChannel do
   defp payload(Task.ToggleDone, txn), do: %{task: TaskView.task(txn.update_task)}
 
   defp payload(Task.AddMember, txn) do
-    %{task_id: txn.task.id, member: MemberView.member(txn.add_member)}
+    %{task: TaskView.task(txn.task), member: MemberView.member(txn.add_member)}
   end
 
   defp payload(Task.RemoveMember, txn) do
-    %{task_id: txn.task.id, member: MemberView.member(txn.member)}
+    %{task: TaskView.task(txn.task), member: MemberView.member(txn.member)}
   end
 
   defp payload(Task.AddAttachment, txn) do
-    %{task_id: txn.task.id, attachment: AttachmentView.attachment(txn.attachment)}
+    %{task: TaskView.task(txn.task), attachment: AttachmentView.attachment(txn.attachment)}
   end
 
   defp payload(Task.AddAttachmentVersion, txn) do
-    version = Attachment.VersionView.version(txn.upload_file)
-    %{task_id: txn.task.id, attachment_id: txn.attachment.id, version: version}
+    %{
+      task: TaskView.task(txn.task),
+      attachment: AttachmentView.attachment(txn.new_attachment),
+      version: Attachment.VersionView.version(txn.version)
+    }
   end
 
   defp payload(Task.DeleteAttachmentVersion, txn) do
-    version = Attachment.VersionView.version(txn.version)
-    %{task_id: txn.task.id, attachment_id: txn.attachment.id, version: version}
+    %{
+      task: TaskView.task(txn.task),
+      attachment: AttachmentView.attachment(txn.new_attachment),
+      version: Attachment.VersionView.version(txn.version)
+    }
   end
 
   defp payload(Task.AddComment, txn) do
-    %{task_id: txn.task.id, comment: CommentView.comment(txn.upload_files)}
+    %{task: TaskView.task(txn.task), comment: CommentView.comment(txn.upload_files)}
   end
 
   defp payload(Task.ChangeComment, txn) do
-    %{task_id: txn.task.id, comment: CommentView.comment(txn.upload_files)}
+    %{task: TaskView.task(txn.task), comment: CommentView.comment(txn.upload_files)}
   end
 
   defp payload(Task.RemoveComment, txn) do
-    %{task_id: txn.task.id, comment: CommentView.comment(txn.comment)}
+    %{task: TaskView.task(txn.task), comment: CommentView.comment(txn.comment)}
   end
 
   defp payload(Task.AddReference, txn) do
-    %{task_id: txn.task.id, reference: ReferenceView.reference(txn.add_reference)}
+    %{task: TaskView.task(txn.task), reference: ReferenceView.reference(txn.add_reference)}
   end
 
   defp payload(Task.RemoveReference, txn) do
-    %{task_id: txn.task.id, reference: ReferenceView.reference(txn.reference)}
+    %{task: TaskView.task(txn.task), reference: ReferenceView.reference(txn.reference)}
   end
 end
