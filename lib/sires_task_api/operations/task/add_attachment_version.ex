@@ -17,8 +17,10 @@ defmodule SiresTaskApi.Task.AddAttachmentVersion do
     |> step(:ensure_task_id, &ensure_task_id(&1.attachment, op.params.task_id))
     |> step(:add_version, &Repo.insert(%Task.Attachment.Version{attachment: &1.attachment}))
     |> step(:upload_file, &upload_file(&1.add_version, op.params.version))
-    |> step(:version, &Repo.preload(&1.upload_file, [:attachment]))
-    |> step(:new_attachment, &Repo.preload(&1.attachment, [versions: :attachment], force: true))
+    |> step(:version, &{:ok, Repo.preload(&1.upload_file, [:attachment])})
+    |> step(:new_attachment, fn txn ->
+      {:ok, Repo.preload(txn.attachment, [versions: :attachment], force: true)}
+    end)
   end
 
   defp upload_file(attachment, params) do
