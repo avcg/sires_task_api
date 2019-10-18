@@ -81,7 +81,7 @@ defmodule SiresTaskApiWeb.TaskChannel do
   end
 
   defp payload(Task.AddComment, txn) do
-    %{task_id: txn.task.id, comment: CommentView.comment(txn.add_comment)}
+    %{task_id: txn.task.id, comment: CommentView.comment(txn.upload_files)}
   end
 
   defp payload(Task.ChangeComment, txn) do

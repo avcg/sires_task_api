@@ -110,7 +110,7 @@ defmodule SiresTaskApiWeb.TaskChannelTest do
 
   test "add comment", ctx do
     comment = insert!(:task_comment, task: ctx.task) |> Repo.preload(:attachments)
-    Task.AddComment |> dispatch(%{task: ctx.task, add_comment: comment})
+    Task.AddComment |> dispatch(%{task: ctx.task, upload_files: comment})
 
     assert_push "add_comment", %{task_id: task_id, comment: msg_comment}
     assert task_id == ctx.task.id
