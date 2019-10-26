@@ -146,6 +146,24 @@ defmodule SiresTaskApiWeb.TaskEndpointTest do
       refute response["calendar"]["28"]
     end
 
+    test "filter by user and role", ctx do
+      {:ok, dt, _} = DateTime.from_iso8601("2019-03-15T17:40:21Z")
+      task = insert!(:task, finish_time: dt)
+      other_task = insert!(:task, project: task.project, finish_time: dt)
+
+      responsible = insert!(:user)
+      insert!(:task_member, task: task, user: responsible, role: "responsible")
+
+      insert!(:project_member, project: task.project, user: ctx.user)
+      insert!(:project_member, project: task.project, user: responsible)
+
+      url = "/api/v1/tasks/calendar?year=2019&month=3&user_id=#{responsible.id}&role=responsible"
+      response = ctx.conn |> get(url) |> json_response(200)
+      ids = response |> get_in(["calendar", "15", Access.all(), "id"])
+      assert task.id in ids
+      refute other_task.id in ids
+    end
+
     test "fail to show calendar with wrong params", ctx do
       ctx.conn |> get("/api/v1/tasks/calendar?year=2019") |> json_response(422)
       ctx.conn |> get("/api/v1/tasks/calendar?month=1") |> json_response(422)
