@@ -5,6 +5,7 @@ defmodule SiresTaskApi.Project do
 
   schema "projects" do
     field :name, :string
+    field :archived, :boolean, default: false
     timestamps()
 
     belongs_to :creator, User

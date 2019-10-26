@@ -1,5 +1,7 @@
 defmodule SiresTaskApi.Project.Update do
-  use SiresTaskApi.Operation, params: %{id!: :integer, project!: %{name!: :string}}
+  use SiresTaskApi.Operation,
+    params: %{id!: :integer, project!: %{name!: :string, archived: :boolean}}
+
   alias SiresTaskApi.{Repo, Project, ProjectPolicy}
 
   def build(op) do

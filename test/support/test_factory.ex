@@ -16,7 +16,8 @@ defmodule SiresTaskApi.TestFactory do
 
   def build(:project) do
     %SiresTaskApi.Project{
-      name: "Project ##{sequence()}"
+      name: "Project ##{sequence()}",
+      archived: false
     }
   end
 

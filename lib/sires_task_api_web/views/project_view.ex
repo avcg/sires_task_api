@@ -14,7 +14,7 @@ defmodule SiresTaskApiWeb.ProjectView do
 
   def project(project, :short) do
     project
-    |> Map.take([:id, :name, :inserted_at, :updated_at])
+    |> Map.take([:id, :name, :archived, :inserted_at, :updated_at])
   end
 
   def project(project, :full) do
