@@ -6,7 +6,7 @@ defmodule SiresTaskApi.Query do
       def call(user, opts \\ []) do
         with {:ok, prepared_params} <- user |> prepare_params(opts[:params]),
              {:ok, dynamic} <- prepared_params |> apply_filters() do
-          {:ok, build_query(user, dynamic, opts)}
+          {:ok, build_query(user, dynamic, Keyword.put(opts, :params, prepared_params))}
         end
       end
 

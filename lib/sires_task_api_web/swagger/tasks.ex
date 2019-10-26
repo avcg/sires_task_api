@@ -115,6 +115,8 @@ defmodule SiresTaskApiWeb.Swagger.Tasks do
     parameters do
       year(:query, :integer, "Year", required: true, minimum: 2000, maximum: 9999)
       month(:query, :integer, "Month", required: true, minimum: 1, maximum: 12)
+      user_id(:query, :integer, "User id")
+      role(:query, :string, "Role")
     end
 
     response(200, "OK")
