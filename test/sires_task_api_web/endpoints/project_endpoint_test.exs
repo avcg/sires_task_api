@@ -9,17 +9,20 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
   describe "GET /api/v1/projects" do
     test "list available projects", ctx do
       [project1, project2, project3, project4] = for _ <- 1..4, do: insert!(:project)
+      project5 = insert!(:project, archived: true)
       insert!(:project_member, project: project1, user: ctx.user, role: "guest")
       insert!(:project_member, project: project2, user: ctx.user, role: "regular")
       insert!(:project_member, project: project3, user: ctx.user, role: "admin")
+      insert!(:project_member, project: project5, user: ctx.user, role: "regular")
 
-      response = ctx.conn |> get("/api/v1/projects") |> json_response(200)
+      response = ctx.conn |> get("/api/v1/projects?archived=false") |> json_response(200)
       ids = response["projects"] |> Enum.map(& &1["id"])
 
       assert project1.id in ids
       assert project2.id in ids
       assert project3.id in ids
       refute project4.id in ids
+      refute project5.id in ids
 
       assert response["total_count"] == 3
     end
@@ -37,6 +40,19 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
       response = ctx.conn |> get("/api/v1/projects?limit=2&offset=2") |> json_response(200)
       assert response["total_count"] == 3
       assert response["projects"] |> Enum.count() == 1
+    end
+
+    test "list archived projects", ctx do
+      project1 = insert!(:project, archived: true)
+      project2 = insert!(:project, archived: false)
+      insert!(:project_member, project: project1, user: ctx.user, role: "regular")
+      insert!(:project_member, project: project2, user: ctx.user, role: "regular")
+
+      response = ctx.conn |> get("/api/v1/projects?archived=true") |> json_response(200)
+      ids = response["projects"] |> Enum.map(& &1["id"])
+
+      assert project1.id in ids
+      refute project2.id in ids
     end
   end
 
@@ -87,10 +103,11 @@ defmodule SiresTaskApiWeb.ProjectEndpointTest do
 
       response =
         ctx.conn
-        |> put("/api/v1/projects/#{project.id}", project: %{name: "New name"})
+        |> put("/api/v1/projects/#{project.id}", project: %{name: "New name", archived: true})
         |> json_response(200)
 
       assert response["project"]["name"] == "New name"
+      assert response["project"]["archived"] == true
       assert response["project"]["editor"]["id"] == ctx.user.id
     end
 

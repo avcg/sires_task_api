@@ -9,6 +9,7 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
 
           properties do
             name(:string, "Name", required: true)
+            archived(:boolean, "Archived")
           end
         end,
       Member:
@@ -28,6 +29,10 @@ defmodule SiresTaskApiWeb.Swagger.Projects do
     tag("Projects")
     summary("List available projects")
     paging(size: "limit", offset: "offset")
+
+    parameters do
+      archived(:query, :boolean, "Filter by archived flag")
+    end
 
     response(200, "OK")
     response(401, "Unauthorized")

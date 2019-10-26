@@ -4,7 +4,7 @@ defmodule SiresTaskApi.Project.SharedHelpers do
 
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :archived])
     |> validate_required([:name])
     |> validate_length(:name, max: 255)
   end
