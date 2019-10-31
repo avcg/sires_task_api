@@ -16,7 +16,7 @@ defmodule SiresTaskApiWeb.NotificationSubscriptionEndpointTest do
           operation: "Task.Create"
         )
 
-      response = ctx.conn |> get("/api/v1/notification_subscriptions") |> json_response(200)
+      response = ctx.conn |> get("/api/v1/notification_subscriptions?media=email") |> json_response(200)
       assert result = response["notification_subscriptions"] |> List.first()
       assert result["media"] == [notification_subscription.media]
       assert result["operation"] == notification_subscription.operation

@@ -6,7 +6,7 @@ defmodule SiresTaskApiWeb.NotificationSubscriptionController do
   def index(conn, params) do
     user = conn.assigns.current_user
 
-    with {:ok, query} <- NotificationSubscription.IndexQuery.call(user, params) do
+    with {:ok, query} <- NotificationSubscription.IndexQuery.call(user, params: params) do
       conn |> render(notification_subscriptions: Repo.all(query))
     end
   end
